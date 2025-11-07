@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { styled, useTheme } from '@mui/material/styles';
+import { useState } from "react";
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar from '@mui/material/AppBar';
@@ -20,6 +21,7 @@ import logo from '../assets/images/logo-ch-vauclaire.svg';
 import GraphicEqIcon from '@mui/icons-material/GraphicEq';
 import PauseIcon from '@mui/icons-material/Pause';
 import StopIcon from '@mui/icons-material/Stop';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 
 const drawerWidth = 240;
 
@@ -104,6 +106,8 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 export default function MiniDrawer() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const [isRecording, setIsRecording] = useState(false);
+  const [isPause, setIsPause] = useState(false);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -119,16 +123,6 @@ export default function MiniDrawer() {
       {/* Header */}
       <AppBar position="fixed" open={open}>
         <Toolbar>
-          {/* Insérer logo de vauclaire ici */}
-          <Box
-            component="img"
-            sx={{
-              height: 40,
-              marginRight: 2,
-            }}
-            alt="Logo CH Vauclaire"
-            src={logo}
-          />
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -143,6 +137,15 @@ export default function MiniDrawer() {
           >
             <MenuIcon />
           </IconButton>
+          <Box
+            component="img"
+            sx={{
+              height: 40,
+              marginRight: 2,
+            }}
+            alt="Logo CH Vauclaire"
+            src={logo}
+          />
           <Typography variant="h1">
             Retranscription AI 
           </Typography>
@@ -159,27 +162,34 @@ export default function MiniDrawer() {
         <Divider />
         {/* Liste des fonctionalités*/}
         <List>
-          {/* Commencer l'enregistrement de la voix */}
+          {/* Bouton ENREGISTRER */}
           <ListItem disablePadding>
-            <ListItemButton>
+            <ListItemButton disabled={isRecording} onClick={() => setIsRecording(true)}>
               <ListItemIcon>
                 <GraphicEqIcon />
               </ListItemIcon>
               <ListItemText primary="Enregistrer" />
             </ListItemButton>
           </ListItem>
-          {/* Mettre pause sur l'enregistrement */}
-          {/* AJouter le fait de changer d'icon lors du click et le disabled par défaut lorsque l'enregistrement n'est pas lancé */}
+         {/* Bouton PAUSE (disabled tant que isRecording === false) */}
           <ListItem disablePadding>
-            <ListItemButton>
+            <ListItemButton disabled={!isRecording} onClick={() => setIsPause(!isPause)}>
               <ListItemIcon>
-                <StopIcon />
-                <PauseIcon />
+              {!isPause ? <PauseIcon /> : <PlayArrowIcon />}
               </ListItemIcon>
-              <ListItemText primary="Pause" />
+              <ListItemText primary={!isPause ? "Pause" : "Reprendre"} />
             </ListItemButton>
           </ListItem>
         </List>
+        {/* Bouton STOP (disabled tant que isRecording === false) */}
+      <ListItem disablePadding>
+        <ListItemButton disabled={!isRecording} onClick={() => setIsRecording(false)}>
+          <ListItemIcon>
+            <StopIcon />
+          </ListItemIcon>
+          <ListItemText primary="Stop" />
+        </ListItemButton>
+      </ListItem>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
