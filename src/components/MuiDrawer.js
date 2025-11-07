@@ -171,7 +171,7 @@ export default function MiniDrawer() {
               <ListItemText primary="Enregistrer" />
             </ListItemButton>
           </ListItem>
-         {/* Bouton PAUSE (disabled tant que isRecording === false) */}
+         {/* Bouton PAUSE */}
           <ListItem disablePadding>
             <ListItemButton disabled={!isRecording} onClick={() => setIsPause(!isPause)}>
               <ListItemIcon>
@@ -181,7 +181,7 @@ export default function MiniDrawer() {
             </ListItemButton>
           </ListItem>
         </List>
-        {/* Bouton STOP (disabled tant que isRecording === false) */}
+        {/* Bouton STOP */}
       <ListItem disablePadding>
         <ListItemButton disabled={!isRecording} onClick={() => setIsRecording(false)}>
           <ListItemIcon>

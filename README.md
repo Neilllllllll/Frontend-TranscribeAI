@@ -102,3 +102,20 @@ Cette section a été déplacée ici :
 
 Cette section a été déplacée ici :  
 [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+# Tâches
+- [x] Bouton : Reprendre, Enregistrer, stop et Pause
+- [ ] Affichage d'un timer lors d'un enregistrement
+- [ ] Télecharger la retranscription 
+- [ ] Zone de message pour : erreur, retranscription en cours, retranscription terminé
+- [ ] Historique des retranscriptions
+- [ ] Envoie de mail
+- [ ] Téléverser un fichier
+- [ ] Remplacer une chaine de caractère par une autre
+- [ ] Animation à mettre au début (intro)
+
+
+
+
+
+
