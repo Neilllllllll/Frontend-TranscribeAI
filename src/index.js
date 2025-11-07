@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import reportWebVitals from './reportWebVitals';
 
-// Importation des pages
+// Import des pages
 import NotFound from './pages/NotFound';
 import App from './App';
 import Transcribe from './pages/Transcribe';
