@@ -1,4 +1,4 @@
-# Bien démarrer avec Create React App
+# Front-end Transcribe AI avec Create React App
 
 Ce projet a été initialisé avec [Create React App](https://github.com/facebook/create-react-app).
 
@@ -55,64 +55,55 @@ Le bundling de React est correctement optimisé pour la production et la build e
 Les fichiers générés sont minifiés et leurs noms incluent des hash.  
 Votre application est prête à être déployée !
 
-Consultez la section sur le [déploiement](https://facebook.github.io/create-react-app/docs/deployment) pour plus d’informations.
+Consultez la section sur le [déploiement]() pour plus d’informations.
 
-### `npm run eject`
+## Structure du projet (l'essentiel)
 
-**Attention : cette opération est irréversible. Une fois que vous utilisez `eject`, vous ne pouvez pas revenir en arrière !**
+Frontend-TranscribeAI/
+├── src/
+│   ├── components/
+│   │   |── Timer/
+│   │   |   ├── Timer.js
+│   │   |   └── Timer.styles.js
+│   │   └── Transcriber/
+│   │       ├── Transcriber.js
+│   │       └── Transcriber.styles.js
+│   ├── pages/
+│   │   |── NotFound
+│   │   └── Home
+│   ├── utils/
+│   │   └── format.js
+│   ├── App.js
+│   ├── Theme.js
+│   └── index.css
+│
+├── .env
+├── package.json
+└── README.md
 
-Si les choix d'outillage ou de configuration ne vous conviennent pas, vous pouvez exécuter `eject` à tout moment. Cette commande supprimera la dépendance unique de build de votre projet.
+### Description des dossiers
 
-À la place, elle copiera tous les fichiers de configuration ainsi que les dépendances transitives (webpack, Babel, ESLint, etc.) directement dans votre projet afin que vous ayez un contrôle total dessus. Toutes les commandes, à l’exception de `eject`, continueront de fonctionner, mais elles pointeront vers les scripts copiés, ce qui vous permettra de les modifier. À partir de ce moment-là, vous êtes entièrement autonome.
-
-Vous n’êtes pas obligé d’utiliser `eject`. L’ensemble des fonctionnalités proposées par défaut convient parfaitement aux petites et moyennes applications, et vous ne devriez pas vous sentir forcé de l’utiliser. Toutefois, nous comprenons que cet outil serait limité si vous ne pouviez pas le personnaliser quand vous en avez besoin.
-
-## Pour en savoir plus
-
-Vous pouvez en apprendre davantage dans la [documentation Create React App](https://facebook.github.io/create-react-app/docs/getting-started).
-
-Pour apprendre React, consultez la [documentation React](https://reactjs.org/).
-
-### Découpage du code (Code Splitting)
-
-Cette section a été déplacée ici :  
-[https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyse de la taille du bundle
-
-Cette section a été déplacée ici :  
-[https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Création d'une Progressive Web App
-
-Cette section a été déplacée ici :  
-[https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Configuration avancée
-
-Cette section a été déplacée ici :  
-[https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Déploiement
-
-Cette section a été déplacée ici :  
-[https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` échoue à minifier
-
-Cette section a été déplacée ici :  
-[https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+| Dossier / Fichier | Rôle                                                  |
+| ----------------- | ----------------------------------------------------- |
+| `public/`         | Contient le HTML et le favicon                        |
+| `src/`            | Code source du projet React.                          |
+| `src/components/` | Composants réutilisables.                             |
+| `src/pages/`      | Pages principales                                     |
+| `src/utils/`      | Class utilitaires génériques.                         |
+| `App.js`          | Page par défaut                                       |
+| `.env`            | Variables d’environnement.                            |
 
 # Tâches
 - [x] Bouton : Reprendre, Enregistrer, stop et Pause
-- [ ] Affichage d'un timer lors d'un enregistrement
-- [ ] Télecharger la retranscription 
+- [x] Affichage d'un timer lors d'un enregistrement
+- [ ] Bouton : Téleverser un fichier, télécharger l'audio
+- [x] exporter la retranscription
+- [ ] Envoie de mail
+- [ ] Remplacer une chaine de caractère par une autre
 - [ ] Zone de message pour : erreur, retranscription en cours, retranscription terminé
 - [ ] Historique des retranscriptions
-- [ ] Envoie de mail
-- [ ] Téléverser un fichier
-- [ ] Remplacer une chaine de caractère par une autre
 - [ ] Animation à mettre au début (intro)
+- [ ] Vérifier que le README est à jour, compréhensible et fonctionne
 
 
 

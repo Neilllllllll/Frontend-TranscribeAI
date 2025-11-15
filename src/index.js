@@ -5,9 +5,7 @@ import reportWebVitals from './reportWebVitals';
 // Import des pages
 import NotFound from './pages/NotFound';
 import App from './App';
-import Transcribe from './pages/Transcribe';
-import ThemePreview from './components/ThemePreview';
-import Menu from './pages/Menu.js';
+import Home from './pages/Home';
 
 // MUI Imports pour le thème
 import { CssBaseline } from '@mui/material';
@@ -19,10 +17,8 @@ import {createBrowserRouter, RouterProvider} from "react-router-dom";
 const root = ReactDOM.createRoot(document.getElementById('root'));
 const router = createBrowserRouter([
   {path:"/", element:<App/>},
-  {path:"/Transcribe", element:<Transcribe/>},
-  {path:"*", element:<NotFound/>},
-  {path:"/Theme-preview", element:<ThemePreview/>},
-  {path: "/Menu", element :<Menu/>}
+  {path:"/Home", element:<Home/>},
+  {path:"*", element:<NotFound/>}
 ]);
 
 root.render(

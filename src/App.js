@@ -1,12 +1,11 @@
-import { Button } from '@mui/material';
-import { Link } from 'react-router-dom';
+// App.js
+import AuthLoadingPage from "./components/AuthLoadingPage";
 
-function App() {
+export default function App() {
   return (
-    <Link to="/menu">
-      <Button>Menu</Button>
-    </Link>
+    <>
+      <AuthLoadingPage></AuthLoadingPage>
+    </>
   );
 }
 
-export default App; 
