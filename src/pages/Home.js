@@ -1,5 +1,5 @@
 import { useTheme } from '@mui/material/styles';
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
@@ -14,6 +14,8 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import logo from '../assets/images/logo-ch-vauclaire.svg';
 import { AppBar, Drawer, DrawerHeader } from '../styles/Home.styles'; 
+
+import AudioRecorder from '../utils/AudioRecorder';
 
 // Import des components dans le dossier src
 import Timer from '../components/Timer';
@@ -37,6 +39,43 @@ export default function Home() {
   const [isRecording, setIsRecording] = useState(false);
   const [isPause, setIsPause] = useState(false);
 
+  const[recordedURL, setRecorderURL] = useState("");
+
+  const audioRecorderRef = useRef(null);
+  // Initialize the audio recorder at the first render
+  useEffect(() => {
+    console.log("init");
+    const recorder = new AudioRecorder();
+    recorder.init();
+    audioRecorderRef.current = recorder;
+  }, []);
+
+  // Logique d'enregistrement de la voix utilisateur
+  const handlerStartRecording = () => {
+    setIsRecording(true);
+    audioRecorderRef.current?.start();
+  };
+
+  const handlerPauseRecording = () => {
+    setIsPause(!isPause);
+    if(isPause){
+      audioRecorderRef.current?.resume();
+      return;
+    }
+    audioRecorderRef.current?.pause();
+  }
+
+  const handlerStopRecording = async () => {
+    setIsRecording(false); 
+    setIsPause(false);
+    const result = await audioRecorderRef.current?.stop();
+    if (!result) {
+      setRecorderURL(null);
+      return;
+    }
+    setRecorderURL(result.url); 
+  }
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -44,6 +83,7 @@ export default function Home() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
@@ -92,7 +132,7 @@ export default function Home() {
         <List>
           {/* Bouton ENREGISTRER */}
           <ListItem disablePadding>
-            <ListItemButton disabled={isRecording} onClick={() => setIsRecording(true)}>
+            <ListItemButton disabled={isRecording} onClick={handlerStartRecording}>
               <ListItemIcon>
                 <GraphicEqIcon />
               </ListItemIcon>
@@ -101,7 +141,7 @@ export default function Home() {
           </ListItem>
          {/* Bouton PAUSE */}
           <ListItem disablePadding>
-            <ListItemButton disabled={!isRecording} onClick={() => setIsPause(!isPause)}>
+            <ListItemButton disabled={!isRecording} onClick={handlerPauseRecording}>
               <ListItemIcon>
               {!isPause ? <PauseIcon /> : <PlayArrowIcon />}
               </ListItemIcon>
@@ -110,7 +150,7 @@ export default function Home() {
           </ListItem>
         {/* Bouton STOP */}
         <ListItem disablePadding>
-          <ListItemButton disabled={!isRecording} onClick={() => {setIsRecording(false); setIsPause(false);}}>
+          <ListItemButton disabled={!isRecording} onClick={handlerStopRecording}>
             <ListItemIcon>
               <StopIcon />
             </ListItemIcon>
@@ -176,7 +216,7 @@ export default function Home() {
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
         {/* Créer un composant qui prend en props le fichier audio et affiche la transcription ? */}
-          <Transcriber/>
+          {recordedURL && <Transcriber audioSource={recordedURL}/>}
       </Box>
     </Box>
   );

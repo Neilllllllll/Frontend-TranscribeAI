@@ -37,6 +37,7 @@ export default class AudioRecorder {
 
   // Mettre en pause l'enregistrement
   pause() {
+    console.log(this);
     if (!this.isInit()) {
       return;
     }
@@ -78,7 +79,7 @@ export default class AudioRecorder {
         const audioUrl = URL.createObjectURL(audioBlob);
         resolve({ blob: audioBlob, url: audioUrl });
       });
-
+      
       this.mediaRecorder.stop();
       console.log("🛑 Enregistrement arrêté");
     });
