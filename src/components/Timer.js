@@ -3,10 +3,10 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
 /*
-Composant qui affiche un timer
+Component that render a timer
 Props : 
-{isRecording} -> est a true le timer s'incrémente 
-{isPause} -> est a true le timer se met en pause 
+{isRecording} -> is true when the timer is increasing
+{isPause} -> is true when the timer is on pause
 */
 
 const Timer = ({isRecording, isPause}) => {
@@ -33,20 +33,7 @@ const Timer = ({isRecording, isPause}) => {
   const pad = (n) => String(n).padStart(2, "0");
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        p: 1.5,
-        borderRadius: 2,
-        backgroundColor: (theme) => theme.palette.background.secondaire,
-        border: (theme) => `1px solid ${theme.palette.element.separator}`,
-        width: "fit-content",
-        mx: "auto",
-        userSelect: "none",
-      }}
-    >
+    <Box>
       <Typography
         variant="h3"
         sx={{
