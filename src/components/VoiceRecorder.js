@@ -8,6 +8,7 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import TimerIcon from '@mui/icons-material/Timer';
+import ListSubheader from '@mui/material/ListSubheader';
 // Import components from material UI
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -59,7 +60,12 @@ export default function VoiceRecorder({setRecorderURL}){
     }
     return(
         <>
-        <List>
+        <List       
+            subheader={
+                <ListSubheader component="div" id="nested-list-subheader">
+                    Dictée à temps réel
+                </ListSubheader>}
+        >
             {/* Bouton ENREGISTRER */}
             <ListItem disablePadding>
                 <ListItemButton disabled={isRecording} onClick={handlerStartRecording}>

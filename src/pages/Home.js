@@ -32,6 +32,8 @@ export default function Home() {
   const theme = useTheme();
   const [open, setOpen] = useState(true);
 
+  const retranscriptionTexte = "test";
+
   const[recordedURL, setRecorderURL] = useState("");
 
   const handleDrawerOpen = () => {
@@ -85,56 +87,56 @@ export default function Home() {
             {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
           </IconButton>
         </DrawerHeader>
-        { open ? <Divider>Dictée à temps réel</Divider> : <Divider/>}
+        <Divider/>
         <VoiceRecorder setRecorderURL= {setRecorderURL}/>
-      { open ? <Divider>Retranscription</Divider> : <Divider/>}
-      <List>
-          {/* Bouton Téléverser un fichier */}
-          <ListItem disablePadding>
-            <ListItemButton disabled={false}>
-              <ListItemIcon>
-                <UploadFileIcon />
-              </ListItemIcon>
-              <ListItemText primary="Téléverser" />
-            </ListItemButton>
-          </ListItem>
-          {/* Bouton programmer une retranscription */}
-          <ListItem disablePadding>
-            <ListItemButton disabled={true}>
-              <ListItemIcon>
-                <CalendarMonthIcon />
-              </ListItemIcon>
-              <ListItemText primary="Planifier" />
-            </ListItemButton>
-          </ListItem>
-      </List>
-            { open ? <Divider>Exporter</Divider> : <Divider/>}
-      <List>
-          {/* Bouton copier le texte */}
-          <ListItem disablePadding>
-            <ListItemButton disabled={true}>
-              <ListItemIcon>
-                <ContentCopyIcon />
-              </ListItemIcon>
-              <ListItemText primary="Copier le texte" />
-            </ListItemButton>
-          </ListItem>
-          {/* Bouton copier le texte */}
-          <ListItem disablePadding>
-            <ListItemButton disabled={true}>
-              <ListItemIcon>
-                <AudioFileIcon />
-              </ListItemIcon>
-              <ListItemText primary="Télécharger l'audio" />
-            </ListItemButton>
-          </ListItem>
-          <Exporter></Exporter>
-      </List>
+        <Divider/>
+        <List>
+            {/* Bouton Téléverser un fichier */}
+            <ListItem disablePadding>
+              <ListItemButton disabled={false}>
+                <ListItemIcon>
+                  <UploadFileIcon />
+                </ListItemIcon>
+                <ListItemText primary="Téléverser" />
+              </ListItemButton>
+            </ListItem>
+            {/* Bouton programmer une retranscription */}
+            <ListItem disablePadding>
+              <ListItemButton disabled={true}>
+                <ListItemIcon>
+                  <CalendarMonthIcon />
+                </ListItemIcon>
+                <ListItemText primary="Planifier" />
+              </ListItemButton>
+            </ListItem>
+        </List>
+              { open ? <Divider>Exporter</Divider> : <Divider/>}
+        <List>
+            {/* Bouton copier le texte */}
+            <ListItem disablePadding>
+              <ListItemButton disabled={true}>
+                <ListItemIcon>
+                  <ContentCopyIcon />
+                </ListItemIcon>
+                <ListItemText primary="Copier le texte" />
+              </ListItemButton>
+            </ListItem>
+            {/* Bouton copier le texte */}
+            <ListItem disablePadding>
+              <ListItemButton disabled={true}>
+                <ListItemIcon>
+                  <AudioFileIcon />
+                </ListItemIcon>
+                <ListItemText primary="Télécharger l'audio" />
+              </ListItemButton>
+            </ListItem>
+            <Exporter texteToExport = {retranscriptionTexte}/>
+        </List>
       </Drawer>
       <Box sx={{ flexGrow: 1, p: 3 }}>
-        <DrawerHeader />
-          {/* Créer un composant qui prend en props le fichier audio et affiche la transcription ? */}
-          { recordedURL ?  <Transcriber audioSource={recordedURL}/> : <Box/>}
+      <DrawerHeader />
+        {/* Créer un composant qui prend en props le fichier audio et affiche la transcription ? */}
+        { recordedURL ?  <Transcriber audioSource={recordedURL}/> : <Box/>}
       </Box>
     </Box>
   );

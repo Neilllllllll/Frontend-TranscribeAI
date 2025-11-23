@@ -1,56 +1,69 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import ClickAwayListener from '@mui/material/ClickAwayListener';
-import { Button, ListItem, ListItemButton, ListItemIcon, ListItemText, Stack } from '@mui/material';
-import FileUploadIcon from '@mui/icons-material/FileUpload';
+import { useState } from 'react';
+import List from '@mui/material/List';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Collapse from '@mui/material/Collapse';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
+import ArticleIcon from '@mui/icons-material/Article';
+import NotesIcon from '@mui/icons-material/Notes';
+import IosShareIcon from '@mui/icons-material/IosShare';
+import { FileExporter } from "../utils/TexteExporter";
 
-// Implémenter la logique d'exportation + s'occuper du style !
-/* 
-Composant qui affiche un bouton permettant à l'utilisateur d'exporter ses transcriptions
-Props : 
-{transcriptionTexte} -> Le texte retranscrit
-*/
-export default function Exporter() {
-  const [open, setOpen] = React.useState(false);
+export default function NestedList({texteToExport}) {
+  
+  const exporter = new FileExporter();
 
+  const [open, setOpen] = useState(true);
   const handleClick = () => {
-    setOpen((prev) => !prev);
+    setOpen(!open);
   };
 
-  const handleClickAway = () => {
-    setOpen(false);
-  };
+  const exportToDocx  = async () => {
+    await exporter.exportDocx("mon_document", texteToExport);
+  }
 
-  const styles = {
-    position: 'absolute',
-    top: 40,
-    right: 0,
-    left: 0,
-    zIndex: 1,
-    border: '1px solid',
-    p: 1,
-    bgcolor: 'background.paper',
-  };
+  const exportToPdf  = () => {
+    exporter.exportPdf("mon_document", texteToExport);
+  }
+
+  const exportToTxt  = async () => {
+    exporter.exportTxt("mon_document", texteToExport);
+  }
 
   return (
-    <ClickAwayListener onClickAway={handleClickAway}>
-      <Box sx={{ position: 'relative' }}>
-          <ListItem disablePadding>
-            <ListItemButton disabled={false} onClick={handleClick}>
-              <ListItemIcon>
-                <FileUploadIcon />
-              </ListItemIcon>
-              <ListItemText primary="Exporter" />
-            </ListItemButton>
-          </ListItem>
-        {open ? (
-            <Stack spacing={2} sx = {styles}>
-                <Button>PDF</Button>
-                <Button>DOCX</Button>
-                <Button>TXT</Button>
-            </Stack>
-        ) : null}
-      </Box>
-    </ClickAwayListener>
+    <List>
+      <ListItemButton onClick={handleClick}>
+        <ListItemIcon>
+          <IosShareIcon />
+        </ListItemIcon>
+        <ListItemText primary="Exporter" />
+        {open ? <ExpandLess /> : <ExpandMore />}
+      </ListItemButton>
+      <Collapse in={open} timeout="auto" unmountOnExit>
+        <List component="div" disablePadding>
+          <ListItemButton sx={{ pl: 4 }} onClick={exportToDocx}>
+            <ListItemIcon>
+              <ArticleIcon />
+            </ListItemIcon>
+            <ListItemText primary="DOCX" />
+          </ListItemButton>
+          <ListItemButton sx={{ pl: 4 }}  onClick={exportToPdf}>
+            <ListItemIcon>
+              <PictureAsPdfIcon />
+            </ListItemIcon>
+            <ListItemText primary="PDF" />
+          </ListItemButton>
+          <ListItemButton sx={{ pl: 4 }}  onClick={exportToTxt}>
+            <ListItemIcon>
+              <NotesIcon />
+            </ListItemIcon>
+            <ListItemText primary="TXT" />
+          </ListItemButton>
+        </List>
+      </Collapse>
+    </List>
   );
 }
