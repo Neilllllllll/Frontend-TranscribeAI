@@ -15,7 +15,7 @@ const Timer = ({isRecording, isPause}) => {
   useEffect(() => {
     if (!isRecording || isPause) return;
 
-    // incrémente le timer de 1 secondes
+    // Increase the timer to 1 each second
     let timer = setTimeout(() => {
       setCount((count) => count + 1);
     }, 1000);

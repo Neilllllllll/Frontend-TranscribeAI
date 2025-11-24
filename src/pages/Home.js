@@ -15,12 +15,13 @@ import ListItemText from '@mui/material/ListItemText';
 import logo from '../assets/images/logo-ch-vauclaire.svg';
 import { AppBar, Drawer, DrawerHeader } from '../styles/Home.styles';
 import Exporter from '../components/Exporter';
+import ListSubheader from '@mui/material/ListSubheader';
 
 // Import des components dans le dossier src
-
-import Transcriber from '../components/Transcriber';
+import TranscriptionDisplay from '../components/TranscriptionDisplay';
+import AudioUpload from '../components/AudioUpload';
 // Import des Icons
-import UploadFileIcon from '@mui/icons-material/UploadFile';
+
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import IconButton from '@mui/material/IconButton';
@@ -86,18 +87,19 @@ export default function Home() {
           </IconButton>
         </DrawerHeader>
         <Divider/>
-        <VoiceRecorder setRecorderURL= {setRecorderURL}/>
+        <List
+          subheader={
+          <ListSubheader component="div" id="nested-list-subheader">
+              {open ? "Dictée à temps réel" : " " }
+          </ListSubheader>}
+        >
+          <VoiceRecorder setRecorderURL = {setRecorderURL}/>
+        </List>
+
         <Divider/>
         <List>
             {/* Bouton Téléverser un fichier */}
-            <ListItem disablePadding>
-              <ListItemButton disabled={false}>
-                <ListItemIcon>
-                  <UploadFileIcon />
-                </ListItemIcon>
-                <ListItemText primary="Téléverser" />
-              </ListItemButton>
-            </ListItem>
+            <AudioUpload setRecorderURL = {setRecorderURL}/>
             {/* Bouton programmer une retranscription */}
             <ListItem disablePadding>
               <ListItemButton disabled={true}>
@@ -109,12 +111,29 @@ export default function Home() {
             </ListItem>
         </List>
         <Divider/>
-        <Exporter texteToExport = {retranscriptionTexte}/>
+        <List
+          subheader={
+          <ListSubheader component="div" id="nested-list-subheader">
+            {open ? "Options d'exportation" : " " }
+          </ListSubheader>}
+        >
+          <Exporter texteToExport = {retranscriptionTexte}/>
+        </List>
       </Drawer>
       <Box sx={{ flexGrow: 1, p: 3 }}>
       <DrawerHeader />
         {/* Créer un composant qui prend en props le fichier audio et affiche la transcription ? */}
-        { recordedURL ?  <Transcriber audioSource={recordedURL}/> : <Box/>}
+        <Box sx ={{
+          width : "100%",
+          display : 'flex',
+          flexDirection :"column",
+          alignItems : 'center',
+          gap : 2
+        }}>
+          <TranscriptionDisplay/>
+          <Typography> Message d'erreur à ajouter (Alert manager) </Typography>
+          <audio style={{ width: '80%' }} controls src = {recordedURL}></audio>
+        </Box>
       </Box>
     </Box>
   );

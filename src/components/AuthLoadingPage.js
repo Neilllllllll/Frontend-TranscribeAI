@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Box, CircularProgress, Typography, useTheme } from "@mui/material";
 
 /* 
- Page de chargement où l'on vérifiera l'identité de l'utilisateur
+  Loading page were we save the session data and verify the auth
 */
 
 export default function AuthLoadingPage () {
