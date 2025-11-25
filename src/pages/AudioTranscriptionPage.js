@@ -20,20 +20,41 @@ import ListSubheader from '@mui/material/ListSubheader';
 // Import des components dans le dossier src
 import TranscriptionDisplay from '../components/TranscriptionDisplay';
 import AudioUpload from '../components/AudioUpload';
+import AudioPlayer from '../components/AudioPlayer';
+import AudioRecorder from '../components/AudioRecorder';
 // Import des Icons
 
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import IconButton from '@mui/material/IconButton';
-import VoiceRecorder from '../components/VoiceRecorder';
 
-export default function Home() {
+
+export default function AudioTranscriptionPage() {
   const theme = useTheme();
   const [open, setOpen] = useState(true);
+  const [audio, setAudio] = useState(null);
+  const [error, setError] = useState(null);
+  const [transcription, setTranscription] = useState("null");
 
-  const retranscriptionTexte = "test";
+  const handleRecordEnd = (blob, mimeType) => {
+    setAudio({
+      blob: blob,
+      mimeType: mimeType,
+      filename: "recorded-audio.webm"
+    });
+    setTranscription("");
+    setError(null);
+  };
 
-  const[recordedURL, setRecorderURL] = useState("");
+  const handleUploadEnd = (file) => {
+    setAudio({
+      blob: file,
+      mimeType: file.type,
+      filename: file.name
+    });
+    setTranscription("");
+    setError(null);
+  };
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -93,13 +114,13 @@ export default function Home() {
               {open ? "Dictée à temps réel" : " " }
           </ListSubheader>}
         >
-          <VoiceRecorder setRecorderURL = {setRecorderURL}/>
+          <AudioRecorder onRecordEnd = {handleRecordEnd}/>
         </List>
 
         <Divider/>
         <List>
             {/* Bouton Téléverser un fichier */}
-            <AudioUpload setRecorderURL = {setRecorderURL}/>
+            <AudioUpload onUploadEnd = {handleUploadEnd} setError={setError} />
             {/* Bouton programmer une retranscription */}
             <ListItem disablePadding>
               <ListItemButton disabled={true}>
@@ -117,7 +138,7 @@ export default function Home() {
             {open ? "Options d'exportation" : " " }
           </ListSubheader>}
         >
-          <Exporter texteToExport = {retranscriptionTexte}/>
+          <Exporter texteToExport = {transcription}/>
         </List>
       </Drawer>
       <Box sx={{ flexGrow: 1, p: 3 }}>
@@ -130,9 +151,9 @@ export default function Home() {
           alignItems : 'center',
           gap : 2
         }}>
-          <TranscriptionDisplay/>
-          <Typography> Message d'erreur à ajouter (Alert manager) </Typography>
-          <audio style={{ width: '80%' }} controls src = {recordedURL}></audio>
+          <TranscriptionDisplay transcription = {transcription}/>
+          <Typography> {error} </Typography>
+          <AudioPlayer blob = {audio?.blob}/>
         </Box>
       </Box>
     </Box>

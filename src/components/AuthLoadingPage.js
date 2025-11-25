@@ -12,7 +12,7 @@ export default function AuthLoadingPage () {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigate("/home");
+      navigate("/AudioTranscription");
     }, 1500);
 
     return () => clearTimeout(timer);

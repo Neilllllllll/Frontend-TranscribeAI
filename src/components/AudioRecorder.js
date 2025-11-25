@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 // Import a class that allows to record
-import AudioRecorder from '../utils/AudioRecorder';
+import Recorder from '../utils/Recorder';
 // Import icons from material UI
 import PauseIcon from '@mui/icons-material/Pause';
 import StopIcon from '@mui/icons-material/Stop';
@@ -18,7 +18,7 @@ import { useTheme } from '@mui/material/styles';
 
 import Timer from './Timer';
 
-export default function VoiceRecorder({setRecorderURL}){
+export default function AudioRecorder({ onRecordEnd }){
     const theme = useTheme();
     const [isRecording, setIsRecording] = useState(false);
     const [isPause, setIsPause] = useState(false);
@@ -26,18 +26,18 @@ export default function VoiceRecorder({setRecorderURL}){
     const audioRecorderRef = useRef(null);
     // Initialize the audio recorder at the first render
     useEffect(() => {
-        console.log("init");
-        const recorder = new AudioRecorder();
+        const recorder = new Recorder();
         recorder.init();
         audioRecorderRef.current = recorder;
     }, []);
 
-    // Logique d'enregistrement de la voix utilisateur
+    // start recording
     const handlerStartRecording = () => {
         setIsRecording(true);
         audioRecorderRef.current?.start();
     };
 
+    // pause recording
     const handlerPauseRecording = () => {
         setIsPause(!isPause);
         if(isPause){
@@ -47,15 +47,16 @@ export default function VoiceRecorder({setRecorderURL}){
         audioRecorderRef.current?.pause();
     }
 
+    // stop recording and return blob to parent component
     const handlerStopRecording = async () => {
         setIsRecording(false); 
         setIsPause(false);
-        const result = await audioRecorderRef.current?.stop();
-        if (!result) {
-        setRecorderURL(null);
+        const blob = await audioRecorderRef.current?.stop();
+        if (!blob) {
+        onRecordEnd(null);
         return;
         }
-        setRecorderURL(result.url); 
+        onRecordEnd(blob.audioBlob, "audio/webm");
     }
     return(
         <>

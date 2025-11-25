@@ -1,5 +1,5 @@
 // audioRecorder.js
-export default class AudioRecorder {
+export default class Recorder {
   constructor() {
     this.mediaRecorder = null;
     this.audioChunks = [];
@@ -76,8 +76,7 @@ export default class AudioRecorder {
 
       this.mediaRecorder.addEventListener("stop", () => {
         const audioBlob = new Blob(this.audioChunks, { type: "audio/webm" });
-        const audioUrl = URL.createObjectURL(audioBlob);
-        resolve({ blob: audioBlob, url: audioUrl });
+        resolve({ audioBlob });
       });
       
       this.mediaRecorder.stop();

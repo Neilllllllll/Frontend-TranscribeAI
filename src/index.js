@@ -5,7 +5,7 @@ import reportWebVitals from './reportWebVitals';
 // Import des pages
 import NotFound from './pages/NotFound';
 import App from './App';
-import Home from './pages/Home';
+import AudioTranscriptionPage from './pages/AudioTranscriptionPage';
 
 // MUI Imports pour le thème
 import { CssBaseline } from '@mui/material';
@@ -17,7 +17,7 @@ import {createBrowserRouter, RouterProvider} from "react-router-dom";
 const root = ReactDOM.createRoot(document.getElementById('root'));
 const router = createBrowserRouter([
   {path:"/", element:<App/>},
-  {path:"/Home", element:<Home/>},
+  {path:"/AudioTranscription", element:<AudioTranscriptionPage/>},
   {path:"*", element:<NotFound/>}
 ]);
 
