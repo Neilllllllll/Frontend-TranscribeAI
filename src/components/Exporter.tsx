@@ -16,19 +16,18 @@ import NotesIcon from '@mui/icons-material/Notes';
 import IosShareIcon from '@mui/icons-material/IosShare';
 // Import our exporter utility
 import { FileExporter } from "../utils/TexteExporter";
-
 import { AlertState } from "../types/alert.types.ts";
+import { TranscriptionText } from "../types/transcriptionText.types.ts";
 
 interface ExporterProps {
-  texteToExport: {title: string}[] | null;
+  TranscriptionText: TranscriptionText;
   setAlert: React.Dispatch<React.SetStateAction<AlertState>>;
 }
 
-export default function Exporter({texteToExport, setAlert}: ExporterProps) {
+export default function Exporter({TranscriptionText, setAlert}: ExporterProps) {
   
   const exporter = new FileExporter();
-
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState<boolean>(false);
   const handleClick = () => {
     setOpen(!open);
   };
@@ -53,7 +52,7 @@ export default function Exporter({texteToExport, setAlert}: ExporterProps) {
 
   return (
     <>
-      <ListItemButton onClick={handleClick}>
+      <ListItemButton onClick={handleClick} disabled = {true}>
         <ListItemIcon>
           <IosShareIcon />
         </ListItemIcon>

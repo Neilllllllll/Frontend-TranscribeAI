@@ -1,5 +1,5 @@
 // App.js
-import AuthLoadingPage from "./components/AuthLoadingPage";
+import AuthLoadingPage from "./components/AuthLoadingPage.tsx";
 
 export default function App() {
   return (

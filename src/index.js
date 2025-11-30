@@ -9,7 +9,7 @@ import AudioTranscriptionPage from './pages/AudioTranscriptionPage.tsx';
 
 // MUI Imports pour le thème
 import { CssBaseline } from '@mui/material';
-import theme from './Theme';
+import theme from './Theme.tsx';
 import { ThemeProvider } from '@mui/material';
 
 // Configuration du routeur

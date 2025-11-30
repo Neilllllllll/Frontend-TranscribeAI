@@ -31,18 +31,18 @@ import IconButton from '@mui/material/IconButton';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import MenuIcon from '@mui/icons-material/Menu';
-
+// import types
 import { AlertState } from "../types/alert.types.ts";
 import { Audio } from "../types/audio.types.ts";
 
 export default function AudioTranscriptionPage() {
 
-  const BASE_URL = "https://jsonplaceholder.typicode.com/posts";
+  const BASE_URL = "https://jsonplaceholder.typicode.com/comments";
   const theme = useTheme();
   const [open, setOpen] = useState<boolean>(true);
   const [audio, setAudio] = useState< Audio | null>(null);
-  const [{alert, alertType}, setAlert] = useState<AlertState>({alert: "Bonjour", alertType: "info"});
-  const [transcription, setTranscription] = useState<{title: string}[] | null>(null);
+  const [{alert, alertType}, setAlert] = useState<AlertState>({alert: "", alertType: "info"});
+  const [transcription, setTranscription] = useState<{body: string}[] | null>(null);
   const abortController = useRef<AbortController | null>(null);
 
   // Function to handle audio setting from child components
@@ -171,7 +171,6 @@ export default function AudioTranscriptionPage() {
       </Drawer>
       <Box sx={{ flexGrow: 1, p: 3 }}>
       <DrawerHeader />
-        {/* Créer un composant qui prend en props le fichier audio et affiche la transcription ? */}
         <Box sx ={{
           width : "100%",
           display : 'flex',

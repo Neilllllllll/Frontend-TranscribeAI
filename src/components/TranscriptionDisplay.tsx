@@ -25,23 +25,73 @@ Se renseigner pour défiinr une key pour chaque token
 
 */
 
-import Box from "@mui/material/Box";
+import CopyButton from './CopyButton.tsx';
+import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
+import { useEffect, useState } from 'react';
+import Box from '@mui/material/Box';
 
 interface TranscriptionDisplayProps {
-  transcription: {title: string}[] | null;
+  transcription: {body: string}[] | null;
 }
 
 export default function TranscriptionDisplay({transcription}: TranscriptionDisplayProps) {
+    const [transcriptionText, setTranscriptionText] = useState<string>("");
+
+    useEffect(() => {
+        setTranscriptionText(transcription ? transcription.map((token) => token.body).join(" ") : "");
+    }, [transcription]);
     return(
         <>
-            <Box sx = {{ width: '100%'}}>
-                <Box>
-                    {transcription ? transcription.map((token) => {
-                        return <Typography> {token.title}</Typography>
-                    }) : "Rien n'a été retranscrit pour l'instant"}
+            <Paper
+                elevation={4}
+                role="region"
+                sx ={{
+                    width : "100%",
+                    height : "70vh",
+                    overflow: 'auto',
+                    padding: 2,
+                }}
+                >
+                    {/* Scrollable Box */}
+                <Box
+                    sx={{
+                    height: '100%',
+                    overflow: 'auto',
+                    // Custom scrollbar styles
+                    '&::-webkit-scrollbar': {
+                        width: '10px',
+                        height: '10px',
+                    },
+                    '&::-webkit-scrollbar-thumb': {
+                        borderRadius: 6,
+                        background: 'rgba(255,255,255,0.12)',
+                    },
+                    '&::-webkit-scrollbar-track': {
+                        background: 'transparent',
+                    },
+                    // Firefox
+                    scrollbarWidth: 'thin',
+                    scrollbarColor: 'rgba(255,255,255,0.12) transparent',
+                    }}
+                >
+                    <Box
+                    sx={{
+                        position: 'sticky',
+                        top: 0,
+                        display: 'flex',
+                        justifyContent: 'flex-end',
+                        zIndex: 9999,
+                    }}
+                    >
+                        <CopyButton textToCopy={transcriptionText} />
+                    </Box>
+
+                    <Typography>
+                        {transcriptionText}
+                    </Typography>
                 </Box>
-            </Box>
+            </Paper>
         </>
     );
 };

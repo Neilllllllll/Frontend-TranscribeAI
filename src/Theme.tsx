@@ -1,10 +1,62 @@
-/**Component à mettre à la racine pour personnaliser le thèmes du site*/
-
-
+/** Component à mettre à la racine pour personnaliser le thème du site */
 import { createTheme, responsiveFontSizes } from '@mui/material/styles';
 
+// Définition du type étendu pour inclure les clés personnalisées
+declare module '@mui/material/styles' {
+  interface Palette {
+    background: {
+      principale: string;
+      secondaire: string;
+    };
+    texte: {
+      principal: string;
+      secondaire: string;
+      error: string;
+      succed: string;
+    };
+    element: {
+      link: string;
+      button: string;
+      hover: string;
+      disabled: string;
+      separator: string;
+      icon: string;
+      iconHover: string;
+      iconDisabled: string;
+      listItemHover: string;
+      textHover: string;
+      textDisabled: string;
+    };
+  }
+
+  interface PaletteOptions {
+    background?: {
+      principale?: string;
+      secondaire?: string;
+    };
+    texte?: {
+      principal?: string;
+      secondaire?: string;
+      error?: string;
+      succed?: string;
+    };
+    element?: {
+      link?: string;
+      button?: string;
+      hover?: string;
+      disabled?: string;
+      separator?: string;
+      icon?: string;
+      iconHover?: string;
+      iconDisabled?: string;
+      listItemHover?: string;
+      textHover?: string;
+      textDisabled?: string;
+    };
+  }
+}
+
 let theme = createTheme({
-  // On définit la palette de couleurs
   palette: {
     mode: 'dark',
 
@@ -17,25 +69,24 @@ let theme = createTheme({
       principal: '#E5E5E7',
       secondaire: '#A1A1A3',
       error: '#D72638',
-      succed: '00B37E'
+      succed: '00B37E',
     },
 
     element: {
       link: '#00ADB5',
       button: '#007C82',
       hover: '#00ADB5',
-      disabled : '#575759',
+      disabled: '#575759',
       separator: '#2E2E32',
       icon: '#E5E5E7',
-      iconHover: '#00ADB5', 
+      iconHover: '#00ADB5',
       iconDisabled: '#5A5A5C',
-      listItemHover: '#1f1f1f8a', 
+      listItemHover: '#1f1f1f8a',
       textHover: '#007C82',
       textDisabled: '#8e8e8e',
     },
   },
 
-  // Typographie
   typography: {
     h1: {
       fontWeight: 600,
@@ -81,9 +132,7 @@ let theme = createTheme({
     },
   },
 
-  /**Personnalisation des composants MUI**/
   components: {
-    // Personnalisation des boutons MUI
     MuiButton: {
       defaultProps: {
         variant: 'contained',
@@ -109,10 +158,9 @@ let theme = createTheme({
       },
     },
 
-    // Personnalisation des icons MUI
     MuiSvgIcon: {
       defaultProps: {
-        fontSize: 'medium', // taille par défaut
+        fontSize: 'medium',
       },
       styleOverrides: {
         root: ({ theme }) => ({
@@ -129,39 +177,33 @@ let theme = createTheme({
         }),
       },
     },
-    // Personnalisation des ListItemButton MUI
+
     MuiListItemButton: {
       styleOverrides: {
         root: ({ theme }) => ({
           transition: 'color 0.3s ease',
 
-          // Hover sur le texte
           '&:hover .MuiListItemText-primary': {
             color: theme.palette.element.textHover,
           },
 
-          // Hover sur l'icone
           '&:hover .MuiSvgIcon-root': {
             color: theme.palette.element.iconHover,
           },
 
-          // Disabled → texte
           '&.Mui-disabled .MuiListItemText-primary': {
             color: theme.palette.element.textDisabled,
           },
 
-          // Disabled → icon
           '&.Mui-disabled .MuiSvgIcon-root': {
             color: theme.palette.element.iconDisabled,
           },
         }),
       },
     },
-
-
   },
 });
 
-// Rendre la typographie réactive
+// Typography responsive
 theme = responsiveFontSizes(theme);
 export default theme;
