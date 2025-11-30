@@ -1,5 +1,5 @@
 /* Main page for audio transcription */
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 // Import logo
 import logo from '../assets/images/logo-ch-vauclaire.svg';
 // Import additional components from material UI
@@ -16,7 +16,7 @@ import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import { useTheme } from '@mui/material/styles';
 // Import styles
-import { AppBar, Drawer, DrawerHeader } from '../styles/Home.styles';
+import { AppBar, Drawer, DrawerHeader } from '../styles/AudioTranscriptionPage.styles';
 // Import our components
 import TranscriptionDisplay from '../components/TranscriptionDisplay';
 import AudioUpload from '../components/AudioUpload';
@@ -32,11 +32,13 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import MenuIcon from '@mui/icons-material/Menu';
 
 export default function AudioTranscriptionPage() {
+  const BASE_URL = "https://jsonplaceholder.typicode.com/posts";
   const theme = useTheme();
   const [open, setOpen] = useState(true);
   const [audio, setAudio] = useState(null);
   const [{alert, alertType}, setAlert] = useState({alert: null, alertType: "error"});
-  const [transcription, setTranscription] = useState("null");
+  const [transcription, setTranscription] = useState("");
+  const abortController = useRef(null);
 
   const handleRecordEnd = (blob, mimeType) => {
     setAudio({
@@ -57,6 +59,34 @@ export default function AudioTranscriptionPage() {
     setTranscription("");
     setAlert({alert: null, alertType: "error"});
   };
+
+  // Call the transcription API when audio state change
+  useEffect(() => {
+    if(!audio){
+      return;
+    }
+    // Peut etre mettre cela dnas un fichier api.js
+    const callTranscriptionAPI = async () => {
+      abortController.current?.abort();
+      abortController.current = new AbortController();
+      setAlert({alert: "La transcription est en cours", alertType: "info"});
+      try{
+        const response = await fetch(BASE_URL, { signal : abortController.current?.signal });
+        const transcription = (await response.json());
+        setTranscription(transcription);
+      }
+      catch(error){
+        if(error.name === "AbortError"){
+          console.log("aborted");
+          return;
+        }
+        setAlert({alert: "Quelque chose c'est mal passé lors de la transcription.", alertType: "error"});
+        return;
+      }
+      setAlert({alert: "La transcription est terminé", alertType: "success"});
+    }
+    callTranscriptionAPI();
+  }, [audio]);
 
   const handleDrawerOpen = () => {
     setOpen(true);

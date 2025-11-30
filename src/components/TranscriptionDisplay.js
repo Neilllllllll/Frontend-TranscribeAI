@@ -1,12 +1,11 @@
 /* Component that display the transcribed text */
 /* 
 A faire : 
+Faire une div scrollable dans laquelle la transcription sera affiché
+
 Faire une affichage conditionnel du CircularProgressWithLabel en fonction de l'état de la retranscription
 
-Réflechir à la question du : est ce que on fait l'appel API dans ce composant ou dans le parent et on passe le texte en props ? : 
-// Cas 1 : on fait l'appel API ici : et on passe le blob audio en props
-// Cas 2 : on fait l'appel API dans le parent et on passe le texte en props
-Je pense que le mieux est le cas 2, car comme ça on sépare bien les responsabilités des composants.
+On fait l'appel API dans le parent et on passe le texte en props
 
 Faire un affichage animer du texte qui s'affiche au fur et à mesure de la retranscription (genre un effet machine à écrire)
 
@@ -22,24 +21,22 @@ Faire d'afficher des timestamps cliquables dans le texte pour aller à un moment
 
 Gérer le cas où y'a pas de texte retranscrit (genre afficher un message "Rien n'a été retranscrit pour l'instant") ?
 
+Se renseigner pour défiinr une key pour chaque token
+
 */
 
-import CircularProgress from '@mui/material/CircularProgress';
-
 import Box from "@mui/material/Box";
-import TextareaAutosize from '@mui/material/TextareaAutosize';
+import Typography from '@mui/material/Typography';
 
-export default function TranscriptionDisplay({transcription, progress}) {
+export default function TranscriptionDisplay({transcription}) {
     return(
         <>
             <Box sx = {{ width: '100%'}}>
-                <CircularProgress value={progress} />
-                <TextareaAutosize
-                    minRows={3}
-                    maxRows={80}
-                    style={{width: '100%'}}>     
-                    {transcription ? transcription : "Rien n'a été retranscrit pour l'instant"}
-                </TextareaAutosize>
+                <Box>
+                    {transcription ? transcription.map((token) => {
+                        return <Typography> {token.title}</Typography>
+                    }) : "Rien n'a été retranscrit pour l'instant"}
+                </Box>
             </Box>
         </>
     );
