@@ -17,7 +17,14 @@ import IosShareIcon from '@mui/icons-material/IosShare';
 // Import our exporter utility
 import { FileExporter } from "../utils/TexteExporter";
 
-export default function Exporter({texteToExport, setAlert}) {
+import { AlertState } from "../types/alert.types.ts";
+
+interface ExporterProps {
+  texteToExport: {title: string}[] | null;
+  setAlert: React.Dispatch<React.SetStateAction<AlertState>>;
+}
+
+export default function Exporter({texteToExport, setAlert}: ExporterProps) {
   
   const exporter = new FileExporter();
 

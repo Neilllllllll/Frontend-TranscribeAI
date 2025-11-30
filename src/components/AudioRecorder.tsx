@@ -14,16 +14,22 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
-import { useTheme } from '@mui/material/styles';
 // Import our component Timer
-import Timer from './Timer';
+import Timer from './Timer.tsx';
+// Import types
+import { AlertState } from "../types/alert.types.ts";
+import { Audio } from "../types/audio.types.ts";
 
-export default function AudioRecorder({ onRecordEnd, setAlert }){
-    const theme = useTheme();
-    const [isRecording, setIsRecording] = useState(false);
-    const [isPause, setIsPause] = useState(false);
+interface AudioRecorderProps {
+  onRecordEnd: (audio: Audio) => void;
+  setAlert: React.Dispatch<React.SetStateAction<AlertState>>
+}
 
-    const audioRecorderRef = useRef(null);
+export default function AudioRecorder({ onRecordEnd, setAlert } : AudioRecorderProps){
+    const [isRecording, setIsRecording] = useState<boolean>(false);
+    const [isPause, setIsPause] = useState<boolean>(false);
+    const audioRecorderRef = useRef<Recorder | null>(null);
+
     // Initialize the audio recorder at the first render
     useEffect(() => {
         const recorder = new Recorder();
@@ -50,17 +56,19 @@ export default function AudioRecorder({ onRecordEnd, setAlert }){
         setAlert({alert: "L'enregistrement est en pause.", alertType: "info"});
     }
 
-    // stop recording and return blob to parent component
+    // stop recording and return the audio to parent component
     const handlerStopRecording = async () => {
+        let newAudio: Audio = {blob: null, mimeType: "", filename: ""};
         setIsRecording(false); 
         setIsPause(false);
-        const blob = await audioRecorderRef.current?.stop();
-        if (!blob) {
-            onRecordEnd(null);
+        const blobResult = await audioRecorderRef.current?.stop();
+        if (!blobResult) {
+            onRecordEnd(newAudio);
             setAlert({alert: "Une erreur est survenue lors de l'enregistrement audio.", alertType: "error"});
             return;
         }
-        onRecordEnd(blob.audioBlob, "audio/webm");
+        newAudio = {blob: blobResult.audioBlob, mimeType: "audio/webm", filename: "recorded-audio.webm"};
+        onRecordEnd(newAudio);
     }
     return(
         <>
@@ -68,7 +76,7 @@ export default function AudioRecorder({ onRecordEnd, setAlert }){
             <ListItem disablePadding>
                 <ListItemButton disabled={isRecording} onClick={handlerStartRecording}>
                     <ListItemIcon>
-                        <FiberManualRecordIcon sx={isRecording ? { color: theme.palette.element.iconHover } : undefined}/>
+                        <FiberManualRecordIcon />
                     </ListItemIcon>
                     <ListItemText primary="Enregistrer" />
                 </ListItemButton>

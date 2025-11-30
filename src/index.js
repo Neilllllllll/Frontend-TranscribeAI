@@ -3,9 +3,9 @@ import ReactDOM from 'react-dom/client';
 import reportWebVitals from './reportWebVitals';
 
 // Import des pages
-import NotFound from './pages/NotFound';
+import NotFound from './pages/NotFound.tsx';
 import App from './App';
-import AudioTranscriptionPage from './pages/AudioTranscriptionPage';
+import AudioTranscriptionPage from './pages/AudioTranscriptionPage.tsx';
 
 // MUI Imports pour le thème
 import { CssBaseline } from '@mui/material';

@@ -8,36 +8,47 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
 // Import icon
 import UploadFileIcon from '@mui/icons-material/UploadFile';
+import { AlertState } from "../types/alert.types.ts";
+import { Audio } from "../types/audio.types.ts";
 
-export default function AudioUpload({onUploadEnd, setAlert}) {
+interface AudioUploadProps {
+  onUploadEnd: (audio: Audio) => void;
+  setAlert: React.Dispatch<React.SetStateAction<AlertState>>;
+}
 
+export default function AudioUpload({onUploadEnd, setAlert}: AudioUploadProps) {
+    
     const MAXSIZEBYTES = 10 * 1024 * 1024;
-    const inputRef = useRef(null);
+    const inputRef = useRef<HTMLInputElement | null>(null);
 
     const handleClick = () => {
         inputRef.current?.click();
     };
 
-    const handleFileChange = (event) => {
-
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        let newAudio: Audio = {blob: null, mimeType: "", filename: ""};
         const selectedFile = event.target.files?.[0];
         if (!selectedFile) {
+            onUploadEnd(newAudio);
             return;
         }
 
         // Check basic MIME type (frontend side, just for UX)
         if (!selectedFile.type.startsWith("audio/")) {
             setAlert({alert: "Le fichier sélectionné n'est pas un fichier audio ou vidéo MP4.", alertType: "error"});
+            onUploadEnd(newAudio);
             return;
         }
 
         // Example: size limit to 10 MB
         if (selectedFile.size > MAXSIZEBYTES) {
             setAlert({alert: "Le fichier audio dépasse la taille maximale autorisée (10 Mo).", alertType: "error"});
+            onUploadEnd(newAudio);
             return;
         }
+        newAudio = {blob: selectedFile, mimeType: selectedFile.type, filename: selectedFile.name};
         setAlert({alert: null, alertType: "info"});
-        onUploadEnd(selectedFile);
+        onUploadEnd(newAudio);
     };
 
     return (

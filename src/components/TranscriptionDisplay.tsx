@@ -28,7 +28,11 @@ Se renseigner pour défiinr une key pour chaque token
 import Box from "@mui/material/Box";
 import Typography from '@mui/material/Typography';
 
-export default function TranscriptionDisplay({transcription}) {
+interface TranscriptionDisplayProps {
+  transcription: {title: string}[] | null;
+}
+
+export default function TranscriptionDisplay({transcription}: TranscriptionDisplayProps) {
     return(
         <>
             <Box sx = {{ width: '100%'}}>

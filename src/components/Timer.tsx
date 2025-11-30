@@ -5,7 +5,12 @@ import { useState, useEffect } from "react";
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
-const Timer = ({isRecording, isPause}) => {
+interface TimerProps {
+  isRecording: boolean;
+  isPause: boolean;
+}
+
+const Timer = ({isRecording, isPause}: TimerProps) => {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
@@ -27,7 +32,7 @@ const Timer = ({isRecording, isPause}) => {
   const hh = Math.floor(count / 3600);
   const mm = Math.floor(count / 60);
   const ss = count % 60;
-  const pad = (n) => String(n).padStart(2, "0");
+  const pad = (n: number) => String(n).padStart(2, "0");
 
   return (
     <Box>
@@ -35,7 +40,7 @@ const Timer = ({isRecording, isPause}) => {
         variant="h3"
         sx={{
           fontVariantNumeric: "tabular-nums",
-          color: (theme) => theme.palette.texte.principal,
+          color: (theme) => theme.palette.text.primary,
           letterSpacing: "0.05em",
         }}
       >

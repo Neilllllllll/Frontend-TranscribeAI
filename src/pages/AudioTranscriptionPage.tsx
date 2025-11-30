@@ -1,6 +1,7 @@
 /* Main page for audio transcription */
 import { useEffect, useRef, useState } from "react";
 // Import logo
+// @ts-ignore: SVG module declaration missing in project types
 import logo from '../assets/images/logo-ch-vauclaire.svg';
 // Import additional components from material UI
 import ListSubheader from '@mui/material/ListSubheader';
@@ -16,13 +17,13 @@ import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import { useTheme } from '@mui/material/styles';
 // Import styles
-import { AppBar, Drawer, DrawerHeader } from '../styles/AudioTranscriptionPage.styles';
+import { AppBar, Drawer, DrawerHeader } from '../styles/AudioTranscriptionPage.styles.tsx';
 // Import our components
-import TranscriptionDisplay from '../components/TranscriptionDisplay';
-import AudioUpload from '../components/AudioUpload';
-import AudioPlayer from '../components/AudioPlayer';
-import AudioRecorder from '../components/AudioRecorder';
-import Exporter from '../components/Exporter';
+import TranscriptionDisplay from '../components/TranscriptionDisplay.tsx';
+import AudioUpload from '../components/AudioUpload.tsx';
+import AudioPlayer from '../components/AudioPlayer.tsx';
+import AudioRecorder from '../components/AudioRecorder.tsx';
+import Exporter from '../components/Exporter.tsx';
 // Import icons from material UI
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -31,32 +32,27 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import MenuIcon from '@mui/icons-material/Menu';
 
+import { AlertState } from "../types/alert.types.ts";
+import { Audio } from "../types/audio.types.ts";
+
 export default function AudioTranscriptionPage() {
+
   const BASE_URL = "https://jsonplaceholder.typicode.com/posts";
   const theme = useTheme();
-  const [open, setOpen] = useState(true);
-  const [audio, setAudio] = useState(null);
-  const [{alert, alertType}, setAlert] = useState({alert: null, alertType: "error"});
-  const [transcription, setTranscription] = useState("");
-  const abortController = useRef(null);
+  const [open, setOpen] = useState<boolean>(true);
+  const [audio, setAudio] = useState< Audio | null>(null);
+  const [{alert, alertType}, setAlert] = useState<AlertState>({alert: "Bonjour", alertType: "info"});
+  const [transcription, setTranscription] = useState<{title: string}[] | null>(null);
+  const abortController = useRef<AbortController | null>(null);
 
-  const handleRecordEnd = (blob, mimeType) => {
+  // Function to handle audio setting from child components
+  const handleAudioSetter = (audio: Audio) => {
     setAudio({
-      blob: blob,
-      mimeType: mimeType,
-      filename: "recorded-audio.webm"
+      blob: audio.blob,
+      mimeType: audio.mimeType,
+      filename: audio.filename
     });
-    setTranscription("");
-    setAlert({alert: null, alertType: "error"});
-  };
-
-  const handleUploadEnd = (file) => {
-    setAudio({
-      blob: file,
-      mimeType: file.type,
-      filename: file.name
-    });
-    setTranscription("");
+    setTranscription(null);
     setAlert({alert: null, alertType: "error"});
   };
 
@@ -75,7 +71,7 @@ export default function AudioTranscriptionPage() {
         const transcription = (await response.json());
         setTranscription(transcription);
       }
-      catch(error){
+      catch(error : any){
         if(error.name === "AbortError"){
           console.log("aborted");
           return;
@@ -146,13 +142,13 @@ export default function AudioTranscriptionPage() {
               {open ? "Dictée à temps réel" : " " }
           </ListSubheader>}
         >
-          <AudioRecorder onRecordEnd = {handleRecordEnd} setAlert={setAlert}/>
+          <AudioRecorder onRecordEnd = {handleAudioSetter} setAlert={setAlert}/>
         </List>
 
         <Divider/>
         <List>
             {/* Bouton Téléverser un fichier */}
-            <AudioUpload onUploadEnd = {handleUploadEnd} setAlert={setAlert} />
+            <AudioUpload onUploadEnd = {handleAudioSetter} setAlert={setAlert} />
             {/* Bouton programmer une retranscription */}
             <ListItem disablePadding>
               <ListItemButton disabled={true}>
@@ -185,7 +181,7 @@ export default function AudioTranscriptionPage() {
         }}>
           <TranscriptionDisplay transcription = {transcription}/>
           { alert && <Alert variant="outlined" severity={alertType}>{alert}</Alert> }
-          <AudioPlayer audioBlob = {audio?.blob}/>
+          <AudioPlayer audio = {audio}/>
         </Box>
       </Box>
     </Box>

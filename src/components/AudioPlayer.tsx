@@ -2,21 +2,23 @@
 // Import react hooks
 import { useEffect, useState } from "react";
 
-export default function AudioPlayer({audioBlob}){
-    const [url, setUrl] = useState(null);
+import { Audio } from "../types/audio.types.ts";
+
+export default function AudioPlayer({ audio }: { audio: Audio | null }) {
+    const [url, setUrl] = useState<string>("");
 
     useEffect(() => {
-        if (!audioBlob) {
-            setUrl(null);
+        if (!audio?.blob) {
+            setUrl("");
             return;
         }
-        const objectUrl = URL.createObjectURL(audioBlob);
+        const objectUrl = URL.createObjectURL(audio.blob);
         setUrl(objectUrl);
 
         return () => {
             URL.revokeObjectURL(objectUrl);
         };
-    }, [audioBlob]);
+    }, [audio?.blob]);
     return(
         <audio style={{ width: '80%' }} controls src = {url}></audio>
     );

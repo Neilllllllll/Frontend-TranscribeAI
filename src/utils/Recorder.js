@@ -1,4 +1,4 @@
-// audioRecorder.js
+
 export default class Recorder {
   constructor() {
     this.mediaRecorder = null;
