@@ -41,7 +41,7 @@ export default function AudioRecorder({ onRecordEnd, setAlert } : AudioRecorderP
     const handlerStartRecording = () => {
         setIsRecording(true);
         audioRecorderRef.current?.start();
-        setAlert({alert: "L'enregistrement a commencé.", alertType: "info"});
+        setAlert({alert: "L'enregistrement est en cours.", alertType: "info"});
     };
 
     // pause recording

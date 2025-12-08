@@ -24,6 +24,7 @@ import AudioUpload from '../components/AudioUpload.tsx';
 import AudioPlayer from '../components/AudioPlayer.tsx';
 import AudioRecorder from '../components/AudioRecorder.tsx';
 import Exporter from '../components/Exporter.tsx';
+import LoadingBarProgress from '../components/loadingBarProgress.tsx';
 // Import icons from material UI
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -43,6 +44,8 @@ export default function AudioTranscriptionScreen() {
   const [audio, setAudio] = useState< Audio | null>(null);
   const [{alert, alertType}, setAlert] = useState<AlertState>({alert: "", alertType: "info"});
   const [transcription, setTranscription] = useState<string | null>(null);
+  const [transcriptionProgress, setTranscriptionProgress] = useState<number>(0);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const abortController = useRef<AbortController | null>(null);
 
   // Function to handle audio setting from child components
@@ -65,6 +68,8 @@ export default function AudioTranscriptionScreen() {
     abortController.current = new AbortController();
 
     setAlert({ alert: "La transcription est en cours", alertType: "info" });
+    setIsLoading(true);
+    setTranscriptionProgress(0);
 
     (async () => {
       try {
@@ -166,9 +171,10 @@ export default function AudioTranscriptionScreen() {
         </List>
       </Drawer>
       <Box sx={{ flexGrow: 1, p: 3 }}>
-      <DrawerHeader />
+        <DrawerHeader />
         <Box sx ={{
           width : "100%",
+          height : "85vh",
           display : 'flex',
           flexDirection :"column",
           alignItems : 'center',
@@ -176,6 +182,7 @@ export default function AudioTranscriptionScreen() {
         }}>
           <TranscriptionDisplay textToDisplay = {transcription ? transcription : null} onTextChange={setTranscription}  setAlert={setAlert}/>
           { alert && <Alert variant="outlined" severity={alertType}>{alert}</Alert> }
+          { isLoading && <LoadingBarProgress progress={transcriptionProgress}/> }
           <AudioPlayer audio = {audio}/>
         </Box>
       </Box>

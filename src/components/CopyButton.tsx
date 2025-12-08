@@ -1,5 +1,3 @@
-/* Component CopyButton.tsx: Button to copy text to clipboard */
-
 import { useState } from 'react';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
@@ -15,15 +13,15 @@ type CopyButtonProps = {
   duration?: number;
   /** Icon size */
   size?: 'small' | 'medium' | 'large';
-
   setAlert: (alert: AlertState) => void;
 };
+
 export default function CopyButton({textToCopy, duration = 1500, size = 'small', setAlert}: CopyButtonProps) {
   const [copied, setCopied] = useState<boolean>(false);
 
   const handleCopy = async () => {
     if(textToCopy=== "" || textToCopy === null) {
-      setAlert({alert: "Impossible de copier un texte vide.", alertType: "error"});
+      setAlert({alert: "Impossible de copier car rien n’a été retranscrit.", alertType: "warning"});
       return;
     }
     try {

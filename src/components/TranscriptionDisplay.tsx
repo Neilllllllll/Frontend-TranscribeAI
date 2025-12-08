@@ -1,3 +1,19 @@
+/* Component to display and edit transcription text with copy functionality */
+/*
+A faire : Lorsque la transcription est en cours, afficher le texte qui arrive au fur et à mesure + 
+animation avec le pourcentage de la transcription / barre de progression ?
+
+Mettre un effet de scroll automatique vers le bas quand le texte s'allonge
+
+Pouvoir changer une chaine de caractère dans le texte et cela pour tout le texte (genre corriger une faute de retranscription)
+
+Indiquer en fonction de la position de lecture de l'audio quelle partie du texte est en train d'être lue (genre surligner la phrase en cours de lecture)
+
+Faire d'afficher des timestamps cliquables dans le texte pour aller à un moment précis de l'audio
+
+Se renseigner pour défiinr une key pour chaque token
+*/
+
 import CopyButton from './CopyButton.tsx';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
@@ -5,7 +21,7 @@ import TextareaAutosize from '@mui/material/TextareaAutosize';
 import { AlertState } from '../types/alert.types.ts';
 import { useTheme } from '@mui/material/styles';
 
-type ChildProps = {
+type TranscriptionDisplayProps = {
   textToDisplay: string | null; 
   onTextChange?: (newText: string) => void;
   setAlert: (alert: AlertState) => void;
@@ -15,10 +31,9 @@ export default function TranscriptionDisplay({
   textToDisplay,
   onTextChange,
   setAlert,
-}: ChildProps) {
+}: TranscriptionDisplayProps) {
   
   const theme = useTheme();
-
   return (
     <Paper
       elevation={4}
@@ -65,25 +80,30 @@ export default function TranscriptionDisplay({
         >
           <CopyButton textToCopy={textToDisplay ?? ""} setAlert={setAlert} />
         </Box>
-
-        {/* --- Zone de texte --- */}
-        <TextareaAutosize
-          value={textToDisplay ?? "Pas de transcription pour le moment"}
-          minRows={20}
-          onChange={(e) => onTextChange?.(e.target.value)}
-          spellCheck={false}
-          style={{
-            width: "100%",
-            fontSize: "16px",
-            color: theme.palette.text.primary,
-            padding: "12px",
-            resize: "none",
-            lineHeight: 1.6,
-            outline: "none",
-            border: "none",
-            backgroundColor: "transparent",
-          }}
-        />
+            {/* Si il n'y a pas de texte à afficher on affiche l'animation, si non on affiche le texteArea */}
+            {
+            !textToDisplay ? (
+                <p>Animation à faire</p>
+            ) : (
+                <TextareaAutosize
+                value={textToDisplay}
+                minRows={20}
+                onChange={(e) => onTextChange?.(e.target.value)}
+                spellCheck={false}
+                style={{
+                    width: "100%",
+                    fontSize: "16px",
+                    color: theme.palette.text.primary,
+                    padding: "12px",
+                    resize: "none",
+                    lineHeight: 1.6,
+                    outline: "none",
+                    border: "none",
+                    backgroundColor: "transparent",
+                }}
+                />
+            )
+            }
       </Box>
     </Paper>
   );
