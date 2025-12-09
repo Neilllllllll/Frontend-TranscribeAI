@@ -26,7 +26,7 @@ export default class Recorder {
 
   // Démarrer l'enregistrement
   start() {
-    if (!this.isInit()) {
+    if (!this.isInit() || this.mediaRecorder.state === "recording") {
       return;
     }
 

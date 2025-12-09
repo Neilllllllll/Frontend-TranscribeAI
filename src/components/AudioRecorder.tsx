@@ -25,6 +25,15 @@ interface AudioRecorderProps {
     setAlert: (alert: AlertState) => void;
 }
 
+const pulseStyle = {
+  animation: "pulse 1s infinite ease-in-out",
+  "@keyframes pulse": {
+    "0%": { transform: "scale(1)", opacity: 1 },
+    "50%": { transform: "scale(1.3)", opacity: 0.6 },
+    "100%": { transform: "scale(1)", opacity: 1 }
+  }
+};
+
 export default function AudioRecorder({ onRecordEnd, setAlert } : AudioRecorderProps){
     const [isRecording, setIsRecording] = useState<boolean>(false);
     const [isPause, setIsPause] = useState<boolean>(false);
@@ -39,6 +48,7 @@ export default function AudioRecorder({ onRecordEnd, setAlert } : AudioRecorderP
 
     // start recording
     const handlerStartRecording = () => {
+        if (isRecording) return;
         setIsRecording(true);
         audioRecorderRef.current?.start();
         setAlert({alert: "L'enregistrement est en cours.", alertType: "info"});
@@ -74,9 +84,12 @@ export default function AudioRecorder({ onRecordEnd, setAlert } : AudioRecorderP
         <>
             {/* Bouton ENREGISTRER */}
             <ListItem disablePadding>
-                <ListItemButton disabled={isRecording} onClick={handlerStartRecording}>
+                <ListItemButton onClick={handlerStartRecording}>
                     <ListItemIcon>
-                        <FiberManualRecordIcon />
+                        {isRecording ? <FiberManualRecordIcon   sx={{
+                            color: isRecording ? '#007C82': "inherit",
+                            ...(isRecording && pulseStyle)
+                        }}/> : <FiberManualRecordIcon />}
                     </ListItemIcon>
                     <ListItemText primary="Enregistrer" />
                 </ListItemButton>
