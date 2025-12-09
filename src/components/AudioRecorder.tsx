@@ -86,10 +86,11 @@ export default function AudioRecorder({ onRecordEnd, setAlert } : AudioRecorderP
             <ListItem disablePadding>
                 <ListItemButton onClick={handlerStartRecording}>
                     <ListItemIcon>
-                        {isRecording ? <FiberManualRecordIcon   sx={{
-                            color: isRecording ? '#007C82': "inherit",
+                            <FiberManualRecordIcon
+                        sx={{
+                            color: isRecording ? "#007C82" : "inherit",
                             ...(isRecording && pulseStyle)
-                        }}/> : <FiberManualRecordIcon />}
+                        }}/>
                     </ListItemIcon>
                     <ListItemText primary="Enregistrer" />
                 </ListItemButton>

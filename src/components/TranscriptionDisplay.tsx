@@ -80,10 +80,9 @@ export default function TranscriptionDisplay({
         >
           <CopyButton textToCopy={textToDisplay ?? ""} setAlert={setAlert} />
         </Box>
-            {/* Si il n'y a pas de texte à afficher on affiche l'animation, si non on affiche le texteArea */}
             {
             !textToDisplay ? (
-                <p>Animation à faire</p>
+                <p>Votre transcription s'affichera ici ...</p>
             ) : (
                 <TextareaAutosize
                 value={textToDisplay}
