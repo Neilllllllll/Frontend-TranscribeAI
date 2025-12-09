@@ -66,19 +66,17 @@ Consultez la section sur le [déploiement]() pour plus d’informations.
 | `src/pages/`      | Pages principales                                     |
 | `src/utils/`      | Class utilitaires génériques.                         |
 | `App.js`          | Page par défaut                                       |
-| `.env`            | Variables d’environnement.                            |
 | `api`            | Call api|
+| `types`            | Définis les types utilisés dans plusieurs fichiers|
+| `styles`            | style des pages |
 
 # Tâches
 - [x] Bouton : Reprendre, Enregistrer, stop et Pause
 - [x] Affichage d'un timer lors d'un enregistrement
 - [x] Bouton : Téleverser un fichier, télécharger l'audio, exporter
 - [x] Zone de message pour : erreur, retranscription en cours, retranscription terminé
-- [ ] Faire le componente pour le texte et son affichage
+- [x] Faire le componente pour le texte et son affichage
 - [ ] Remplacer une chaine de caractère par une autre
-- [ ] Page historique des retranscriptions
-- [ ] Animation à mettre au début (intro)
-- [ ] Vérifier que le README est à jour, compréhensible et fonctionne
 
 
 
