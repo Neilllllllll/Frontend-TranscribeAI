@@ -1,5 +1,5 @@
 import type { Audio } from "../types/audio.types.ts";
-const API_URL = process.env.REACT_APP_API_URL;
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 const API_KEY = process.env.REACT_APP_API_KEY;
 
 // Send an audio file and get the text back
@@ -7,7 +7,7 @@ export async function postAudio(
   audio: Audio,
   signal?: AbortSignal
 ): Promise<string> {
-  if (!API_URL) {
+  if (!API_BASE_URL) {
     throw new Error("BASE_URL transcription non configurée");
     
   }
@@ -20,7 +20,6 @@ export async function postAudio(
     throw new Error("Aucune key fourni");
   }
 
-  
   const header = new Headers();
   header.append("X-API-KEY", API_KEY);
   
@@ -30,8 +29,10 @@ export async function postAudio(
   // Body with the file audio
   const formData = new FormData();
   formData.append("audioFile", audioFile);
+  
+  const url = API_BASE_URL + "/transcription/generate";
 
-  const response = await fetch(API_URL, {
+  const response = await fetch(url, {
     method: "POST",
     headers: header,
     body: formData,
@@ -44,5 +45,5 @@ export async function postAudio(
   }
 
   const transcription = await response.json();
-  return transcription.data.text as string;
+  return transcription.data.transcription as string;
 }

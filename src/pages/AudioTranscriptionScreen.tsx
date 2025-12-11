@@ -63,7 +63,7 @@ export default function AudioTranscriptionScreen() {
   useEffect(() => {
     if (!audio) return;
 
-    // annule toute requête en cours évite qu'on dupplique les requetes
+    // Annule toute requête en cours évite qu'on dupplique les requetes
     abortController.current?.abort();
     abortController.current = new AbortController();
 
@@ -73,8 +73,9 @@ export default function AudioTranscriptionScreen() {
 
     (async () => {
       try {
+        console.log("On attend le retour de la requete ");
         const data = await postAudio(audio, abortController.current!.signal);
-        console.log("data ", data);
+        console.log("La requete est arrivé ");
         setTranscription(data);
         setAlert({ alert: "La transcription est terminée", alertType: "success" });
       } catch (err: any) {
