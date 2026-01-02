@@ -1,5 +1,5 @@
 import type { Audio } from "../types/audio.types.ts";
-import {API_BASE_URL, API_KEY} from "../config.ts"
+import {API_KEY} from "../config.ts"
 
 // Envoie une requete POST et return un identifiant
 export async function createJob(
@@ -8,7 +8,6 @@ export async function createJob(
 ): Promise<string> {
 
   // Vérifie si des données sont manquantes
-  if (!API_BASE_URL) throw new Error("BASE_URL transcription non configurée");
   if (!audio?.blob) throw new Error("Aucun fichier audio fourni.");
   if (!API_KEY) throw new Error("Aucune API key fournie.");
 
@@ -19,7 +18,7 @@ export async function createJob(
   formData.append("audioFile", audioFile);
 
   // Envoie de la requete
-  const response = await fetch(`${API_BASE_URL}/api/batchTranscription/createJob`, {
+  const response = await fetch("/api/batchTranscription/createJob", {
     method: "POST",
     headers: headers,
     body: formData,
@@ -42,11 +41,10 @@ export async function getTranscriptionByUuid(
 ): Promise<string> {
 
   // Vérifie les données manquantes
-  if (!API_BASE_URL) throw new Error("BASE_URL transcription non configurée");
   if (!job_uuid) throw new Error("Aucun uuid fournit.");
   if (!API_KEY) throw new Error("Aucune API key fournie.");
 
-  const response = await fetch(`${API_BASE_URL}/api/batchTranscription/result?job_uuid=${job_uuid}`, {
+  const response = await fetch("/api/batchTranscription/result?job_uuid=" + job_uuid, {
     headers: { "X-API-KEY": API_KEY }
   });
 
@@ -65,11 +63,10 @@ export async function deleteTranscription(
 ): Promise<string> {
 
   // Vérifie les données manquantes
-  if (!API_BASE_URL) throw new Error("BASE_URL transcription non configurée");
   if (!job_id) throw new Error("Aucun fichier audio fourni.");
   if (!API_KEY) throw new Error("Aucune API key fournie.");
 
-  const response = await fetch(`${API_BASE_URL}/api/batchTranscription/delete/${job_id}`, {
+  const response = await fetch("/api/batchTranscription/delete/${job_id}", {
     headers: { "X-API-KEY": API_KEY }
   });
 

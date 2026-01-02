@@ -65,7 +65,7 @@ export default function AudioTranscriptionScreen() {
       try {
         // Create a new transcription job
         const job_uuid = await createJob(audio);
-
+        
         // Polling for the transcription result
         let transcriptionResult: string | null = null;
         let attempts = 0;
