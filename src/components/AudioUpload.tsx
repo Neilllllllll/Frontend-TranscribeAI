@@ -22,6 +22,7 @@ export default function AudioUpload({onUploadEnd, setAlert}: AudioUploadProps) {
     const inputRef = useRef<HTMLInputElement | null>(null);
 
     // Sécurité : si la conversion échoue, on prend 20 par défaut
+    console.log(MAXSIZEBYTES_VAL);
     const rawValue = parseInt(MAXSIZEBYTES_VAL || "20", 10);
     const MAXSIZEBYTES = rawValue * 1048576; 
 
