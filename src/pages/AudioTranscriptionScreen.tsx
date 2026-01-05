@@ -37,6 +37,8 @@ import type { AlertState } from "../types/alert.types.ts";
 import type { Audio } from "../types/audio.types.ts";
 // Import API function
 import { createJob, getTranscriptionByUuid } from "../api/batchMode.tsx";
+// Import env
+import { MAXTIMEPROCESSING, TIMEBETTWENEACHPOLLING } from "../config.ts"; 
 
 export default function AudioTranscriptionScreen() {
   const theme = useTheme();
@@ -58,6 +60,9 @@ export default function AudioTranscriptionScreen() {
   };
 
   useEffect(() => {
+    // En seconde
+    const pollInterval = Number(TIMEBETTWENEACHPOLLING) || 3000;
+    const maxTime = Number(MAXTIMEPROCESSING) || 30000;
     const fetchTranscription = async () => {
       if (!audio) return;
 
@@ -65,11 +70,10 @@ export default function AudioTranscriptionScreen() {
       try {
         // Create a new transcription job
         const job_uuid = await createJob(audio);
-        
         // Polling for the transcription result
         let transcriptionResult: string | null = null;
         let attempts = 0;
-        const maxAttempts = 20;
+        const maxAttempts = maxTime/pollInterval;
 
         while (attempts < maxAttempts) {
           transcriptionResult = await getTranscriptionByUuid(job_uuid);
@@ -77,7 +81,7 @@ export default function AudioTranscriptionScreen() {
             break;
           }
           attempts += 1;
-          await new Promise(res => setTimeout(res, 3000)); // Wait for 3 seconds before next poll
+          await new Promise(res => setTimeout(res, pollInterval)); // Wait for 3 seconds before next poll
         }
 
         if (transcriptionResult) {

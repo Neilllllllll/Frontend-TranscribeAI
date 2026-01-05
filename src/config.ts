@@ -1,1 +1,4 @@
 export const API_KEY = process.env.REACT_APP_API_KEY;
+export const MAXSIZEBYTES = process.env.REACT_APP_MAXSIZEBYTES;
+export const MAXTIMEPROCESSING = process.env.REACT_APP_MAXTIME;
+export const TIMEBETTWENEACHPOLLING = process.env.REACT_APP_TIMEBETTWENEACHPOLLING;

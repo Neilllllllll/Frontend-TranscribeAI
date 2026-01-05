@@ -1,4 +1,5 @@
 /* Componente for uploading audio files, it return the selected file to the parent component */
+import {MAXSIZEBYTES as MAXSIZEBYTES_ENV} from "../config.ts"
 // Import react hooks
 import { useRef } from "react";
 // Import components from material UI
@@ -17,36 +18,32 @@ interface AudioUploadProps {
 }
 
 export default function AudioUpload({onUploadEnd, setAlert}: AudioUploadProps) {
-    
-    const MAXSIZEBYTES = 10 * 1024 * 1024;
+
     const inputRef = useRef<HTMLInputElement | null>(null);
+    const MAXSIZEBYTES = Number(MAXSIZEBYTES_ENV) | 20 * 1048576; // 1048576 = 1 Mo
 
     const handleClick = () => {
         inputRef.current?.click();
     };
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        let newAudio: Audio = {blob: null, mimeType: "", filename: ""};
         const selectedFile = event.target.files?.[0];
         if (!selectedFile) {
-            onUploadEnd(newAudio);
-            return;
+            return null;
         }
 
         // Check basic MIME type (frontend side, just for UX)
         if (!selectedFile.type.startsWith("audio/")) {
-            setAlert({alert: "Le fichier sélectionné n'est pas un fichier audio ou vidéo MP4.", alertType: "error"});
-            onUploadEnd(newAudio);
-            return;
+            setAlert({alert: "Le fichier sélectionné n'est pas un fichier audio ! ", alertType: "error"});
+            return null;
         }
 
-        // Example: size limit to 100 MB
         if (selectedFile.size > MAXSIZEBYTES) {
-            setAlert({alert: "Le fichier audio dépasse la taille maximale autorisée (10 Mo).", alertType: "error"});
-            onUploadEnd(newAudio);
-            return;
+            setAlert({alert: "Le fichier audio dépasse la taille maximale autorisée " + MAXSIZEBYTES/1048576 + " Mo ! ", alertType: "error"});
+            return null;
         }
-        newAudio = {blob: selectedFile, mimeType: selectedFile.type, filename: selectedFile.name};
+
+        const newAudio = {blob: selectedFile, mimeType: selectedFile.type, filename: selectedFile.name};
         setAlert({alert: null, alertType: "info"});
         onUploadEnd(newAudio);
     };
