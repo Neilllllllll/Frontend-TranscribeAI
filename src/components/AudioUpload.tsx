@@ -1,5 +1,5 @@
 /* Componente for uploading audio files, it return the selected file to the parent component */
-import {MAXSIZEBYTES as MAXSIZEBYTES_ENV} from "../config.ts"
+import { MAXSIZEBYTES as MAXSIZEBYTES_VAL } from "../config.ts";
 // Import react hooks
 import { useRef } from "react";
 // Import components from material UI
@@ -20,7 +20,10 @@ interface AudioUploadProps {
 export default function AudioUpload({onUploadEnd, setAlert}: AudioUploadProps) {
 
     const inputRef = useRef<HTMLInputElement | null>(null);
-    const MAXSIZEBYTES = Number(MAXSIZEBYTES_ENV) | 20 * 1048576; // 1048576 = 1 Mo
+
+    // Sécurité : si la conversion échoue, on prend 20 par défaut
+    const rawValue = parseInt(MAXSIZEBYTES_VAL || "20", 10);
+    const MAXSIZEBYTES = rawValue * 1048576; 
 
     const handleClick = () => {
         inputRef.current?.click();
@@ -28,26 +31,25 @@ export default function AudioUpload({onUploadEnd, setAlert}: AudioUploadProps) {
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const selectedFile = event.target.files?.[0];
-        if (!selectedFile) {
-            return null;
-        }
+        if (!selectedFile) return;
 
-        // Check basic MIME type (frontend side, just for UX)
         if (!selectedFile.type.startsWith("audio/")) {
-            setAlert({alert: "Le fichier sélectionné n'est pas un fichier audio ! ", alertType: "error"});
-            return null;
+            setAlert({alert: "Le fichier n'est pas un fichier audio !", alertType: "error"});
+            return;
         }
 
         if (selectedFile.size > MAXSIZEBYTES) {
-            setAlert({alert: "Le fichier audio dépasse la taille maximale autorisée " + MAXSIZEBYTES/1048576 + " Mo ! ", alertType: "error"});
-            return null;
+            setAlert({
+                alert: `Le fichier dépasse la taille maximale autorisée (${rawValue} Mo) !`, 
+                alertType: "error"
+            });
+            return;
         }
 
         const newAudio = {blob: selectedFile, mimeType: selectedFile.type, filename: selectedFile.name};
         setAlert({alert: null, alertType: "info"});
         onUploadEnd(newAudio);
     };
-
     return (
     <>
         <input
