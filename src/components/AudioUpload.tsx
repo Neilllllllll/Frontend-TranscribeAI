@@ -18,7 +18,6 @@ interface AudioUploadProps {
 
 export default function AudioUpload({onUploadEnd, setAlert}: AudioUploadProps) {
     
-    const MAXSIZEBYTES = 10 * 1024 * 1024;
     const inputRef = useRef<HTMLInputElement | null>(null);
 
     const handleClick = () => {
@@ -40,12 +39,6 @@ export default function AudioUpload({onUploadEnd, setAlert}: AudioUploadProps) {
             return;
         }
 
-        // Example: size limit to 10 MB
-        if (selectedFile.size > MAXSIZEBYTES) {
-            setAlert({alert: "Le fichier audio dépasse la taille maximale autorisée (10 Mo).", alertType: "error"});
-            onUploadEnd(newAudio);
-            return;
-        }
         newAudio = {blob: selectedFile, mimeType: selectedFile.type, filename: selectedFile.name};
         setAlert({alert: null, alertType: "info"});
         onUploadEnd(newAudio);
