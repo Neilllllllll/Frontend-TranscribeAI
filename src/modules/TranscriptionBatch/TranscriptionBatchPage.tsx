@@ -75,7 +75,14 @@ export default function TranscriptionBatchPage() {
             break;
           }
           attempts += 1;
-          await new Promise(res => setTimeout(res, pollInterval)); // Wait for 3 seconds before next poll
+          await new Promise((resolve, reject) => {
+            const timer = setTimeout(resolve, pollInterval);
+            // Si le signal est avorté pendant le dodo, on rejette pour sortir du try/catch
+            signal.addEventListener('abort', () => {
+              clearTimeout(timer);
+              reject(new DOMException('Aborted', 'AbortError'));
+            }, { once: true });
+          });
         }
 
         if (!signal.aborted) {
