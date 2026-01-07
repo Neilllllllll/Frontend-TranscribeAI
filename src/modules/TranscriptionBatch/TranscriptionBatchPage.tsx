@@ -39,14 +39,23 @@ export default function TranscriptionBatchPage() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   // Function to handle audio setting from child components
-  const handleAudioSetter = (audio: Audio) => {
-    setAudio({
-      blob: audio.blob,
-      mimeType: audio.mimeType,
-      filename: audio.filename
+  const handleAudioSetter = (newAudio: Audio) => {
+    setAudio((prevAudio) => {
+      // Si on a déjà un audio et que le blob est le même, on ne change rien
+      // (Le re-render ne sera pas déclenché)
+      if (prevAudio?.blob === newAudio.blob) {
+        return prevAudio;
+      }
+      
+      // Sinon, on met à jour
+      setTranscription(null);
+      setAlert({alert: null, alertType: "error"});
+      return {
+        blob: newAudio.blob,
+        mimeType: newAudio.mimeType,
+        filename: newAudio.filename
+      };
     });
-    setTranscription(null);
-    setAlert({alert: null, alertType: "error"});
   };
 
   useEffect(() => {
