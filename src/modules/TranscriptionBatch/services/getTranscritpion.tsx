@@ -1,4 +1,5 @@
 import {API_KEY} from '../config.ts'
+import {TranscriptionJobData} from '../types/getterSchema.ts'
 
 // Envoie une requete GET pour récupérer la transcription
 export async function getTranscriptionByUuid(
@@ -20,6 +21,10 @@ export async function getTranscriptionByUuid(
   }
 
   const payload = await response.json();
-  const transcription = payload.data.transcription;
-  return transcription;
+  const job = payload.data;
+
+  if (job.status === "COMPLETED") {
+    return job.result.transcription; 
+  }
+  // Rajouter tous les types de status pour afficher la position
 }
