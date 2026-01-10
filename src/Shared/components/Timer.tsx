@@ -37,7 +37,6 @@ const Timer = ({isRecording, isPause}: TimerProps) => {
   return (
     <Box>
       <Typography
-        variant="h3"
         sx={{
           fontVariantNumeric: "tabular-nums",
           color: (theme) => theme.palette.text.primary,

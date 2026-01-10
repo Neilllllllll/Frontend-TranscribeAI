@@ -1,5 +1,6 @@
-import {env} from '../../config/env.ts'
+import {BatchTranscriptionEnv} from '../../core/config/env.ts'
 
-export const MAXTIMEPROCESSING = env.MAXTIMEPROCESSING;
-export const TIMEBETTWENEACHPOLLING = env.TIMEBETTWENEACHPOLLING;
-export const API_KEY = env.API_KEY;
+export const MAXTIMEPROCESSING = BatchTranscriptionEnv.MAXTIMEPROCESSING;
+export const TIMEBETTWENEACHPOLLING = BatchTranscriptionEnv.TIMEBETTWENEACHPOLLING;
+export const API_KEY = BatchTranscriptionEnv.API_KEY;
+export const MAXSIZEAUDIO = Number(BatchTranscriptionEnv.MAXSIZEAUDIO) || 15;

@@ -9,8 +9,8 @@ import {
 } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import { useNavigate } from 'react-router-dom';
-import logo from "../Shared/assets/logo.svg"
-import { MODULE_ROUTES } from '../../config/routes.tsx';
+import logo from "../../Shared/assets/logo.svg"
+import { MODULE_ROUTES } from '../../Shared/routes.tsx';
 
 export default function HomePage() {
   const navigate = useNavigate();

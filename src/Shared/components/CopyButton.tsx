@@ -4,7 +4,7 @@ import Tooltip from '@mui/material/Tooltip';
 import Snackbar from '@mui/material/Snackbar';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import CheckIcon from '@mui/icons-material/Check';
-import { AlertState } from '../../../types/alert.types.ts';
+import { useAlert } from '../contexts/AlertContext.tsx';
 
 type CopyButtonProps = {
   /** Text to copy */
@@ -13,15 +13,15 @@ type CopyButtonProps = {
   duration?: number;
   /** Icon size */
   size?: 'small' | 'medium' | 'large';
-  setAlert: (alert: AlertState) => void;
 };
 
-export default function CopyButton({textToCopy, duration = 1500, size = 'small', setAlert}: CopyButtonProps) {
+export default function CopyButton({textToCopy, duration = 1500, size = 'small'}: CopyButtonProps) {
   const [copied, setCopied] = useState<boolean>(false);
+  const {showAlert} = useAlert();
 
   const handleCopy = async () => {
     if(textToCopy=== "" || textToCopy === null) {
-      setAlert({alert: "Impossible de copier car rien n’a été retranscrit.", alertType: "error"});
+      showAlert("Impossible de copier car rien n’a été retranscrit.", "error");
       return;
     }
     try {
@@ -29,7 +29,7 @@ export default function CopyButton({textToCopy, duration = 1500, size = 'small',
       setCopied(true);
       setTimeout(() => setCopied(false), duration);
     } catch {
-      setAlert({alert: "Impossible de copier le texte", alertType: "error"});
+      showAlert("Impossible de copier le texte", "error");
     }
   };
 

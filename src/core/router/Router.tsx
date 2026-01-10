@@ -1,11 +1,12 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
-import { transcriptionRoutes } from "./modules/TranscriptionBatch/routes.tsx";
-import { diarizationRoutes } from "./modules/Diarization/routes.tsx"
-import { ProtectedRoute } from "./modules/Shared/components/ProtectedRoute.tsx";
-import HomePage from "./modules/Home/HomePage.tsx";
-import AuthPage from "./modules/Auth/AuthPage.tsx";
-import MainLayout from "./modules/Shared/layouts/MainLayout.tsx";
-import NotFoundPage from "./modules/Shared/pages/NotFoundPage.tsx";
+import { transcriptionRoutes } from "../../modules/TranscriptionBatch/routes.tsx";
+import { diarizationRoutes } from "../../modules/Diarization/routes.tsx"
+import { ProtectedRoute } from "./ProtectedRoute.tsx";
+import {AlertProvider} from '../../Shared/contexts/AlertContext.tsx'
+import HomePage from "../../modules/Home/HomePage.tsx";
+import AuthPage from "../../modules/Auth/AuthPage.tsx";
+import MainLayout from "../../Shared/layouts/MainLayout.tsx";
+import NotFoundPage from "../../Shared/pages/NotFoundPage.tsx";
 
 export const router = createBrowserRouter([
   // 1. Redirection initiale
@@ -27,7 +28,7 @@ export const router = createBrowserRouter([
       { path: "/home", index: true, element: <HomePage /> },
       {
         path: "/app",
-        element: <MainLayout />,
+        element: (<AlertProvider><MainLayout /></AlertProvider>),
         children: [
           ...transcriptionRoutes,
           ...diarizationRoutes,

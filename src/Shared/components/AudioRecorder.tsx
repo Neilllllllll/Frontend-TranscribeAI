@@ -17,12 +17,11 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 // Import our component Timer
 import Timer from './Timer.tsx';
 // Import types
-import { AlertState } from "../types/alert.types.ts";
 import { Audio } from "../types/audio.types.ts";
+import { useAlert } from "../contexts/AlertContext.tsx";
 
 interface AudioRecorderProps {
     onRecordEnd: (audio: Audio) => void;
-    setAlert: (alert: AlertState) => void;
 }
 
 const pulseStyle = {
@@ -34,10 +33,11 @@ const pulseStyle = {
   }
 };
 
-export default function AudioRecorder({ onRecordEnd, setAlert } : AudioRecorderProps){
+export default function AudioRecorder({ onRecordEnd } : AudioRecorderProps){
     const [isRecording, setIsRecording] = useState<boolean>(false);
     const [isPause, setIsPause] = useState<boolean>(false);
     const audioRecorderRef = useRef<Recorder | null>(null);
+    const { showAlert } = useAlert();
 
     // Initialize the audio recorder at the first render
     useEffect(() => {
@@ -51,7 +51,7 @@ export default function AudioRecorder({ onRecordEnd, setAlert } : AudioRecorderP
         if (isRecording) return;
         setIsRecording(true);
         audioRecorderRef.current?.start();
-        setAlert({alert: "L'enregistrement est en cours.", alertType: "info"});
+        showAlert("L'enregistrement est en cours.", "info");
     };
 
     // pause recording
@@ -59,11 +59,11 @@ export default function AudioRecorder({ onRecordEnd, setAlert } : AudioRecorderP
         setIsPause(!isPause);
         if(isPause){
         audioRecorderRef.current?.resume();
-        setAlert({alert: "L'enregistrement a repris.", alertType: "info"});
+        showAlert( "L'enregistrement a repris.", "info");
         return;
         }
         audioRecorderRef.current?.pause();
-        setAlert({alert: "L'enregistrement est en pause.", alertType: "info"});
+        showAlert( "L'enregistrement est en pause.", "info");
     }
 
     // stop recording and return the audio to parent component
@@ -74,7 +74,7 @@ export default function AudioRecorder({ onRecordEnd, setAlert } : AudioRecorderP
         const blobResult = await audioRecorderRef.current?.stop();
         if (!blobResult) {
             onRecordEnd(newAudio);
-            setAlert({alert: "Une erreur est survenue lors de l'enregistrement audio.", alertType: "error"});
+            showAlert( "Une erreur est survenue lors de l'enregistrement audio.", "error");
             return;
         }
         newAudio = {blob: blobResult.audioBlob, mimeType: "audio/webm", filename: "recorded-audio.webm"};
@@ -88,7 +88,7 @@ export default function AudioRecorder({ onRecordEnd, setAlert } : AudioRecorderP
                     <ListItemIcon>
                             <FiberManualRecordIcon
                         sx={{
-                            color: isRecording ? "#007C82" : "inherit",
+                            color: isRecording ? "red" : "inherit",
                             ...(isRecording && pulseStyle)
                         }}/>
                     </ListItemIcon>

@@ -1,5 +1,5 @@
 
-import { Audio } from '../../Shared/types/audio.types.ts'
+import { Audio } from '../../../Shared/types/audio.types.ts'
 
 import {API_KEY} from "../config.ts"
 export async function createJob(

@@ -1,17 +1,17 @@
 import {API_KEY} from '../config.ts'
-import {TranscriptionJobData} from '../types/getterSchema.ts'
+import {getStatusAPIResponse} from '../types/getterSchema.ts'
 
-// Envoie une requete GET pour récupérer la transcription
+// Envoie une requete GET pour récupérer la transcription et/ou l'état du job
 export async function getTranscriptionByUuid(
   job_uuid: string,
   signal?: AbortSignal
-): Promise<string> {
+): Promise<getStatusAPIResponse> {
 
   // Vérifie les données manquantes
   if (!job_uuid) throw new Error("Aucun uuid fournit.");
   if (!API_KEY) throw new Error("Aucune API key fournie.");
 
-  const response = await fetch("/api/batchTranscription/result?job_uuid=" + job_uuid, {
+  const response = await fetch("http://localhost:5000/api/batchTranscription/result?job_uuid=" + job_uuid, {
     headers: { "X-API-KEY": API_KEY },
     signal
   });
@@ -21,10 +21,5 @@ export async function getTranscriptionByUuid(
   }
 
   const payload = await response.json();
-  const job = payload.data;
-
-  if (job.status === "COMPLETED") {
-    return job.result.transcription; 
-  }
-  // Rajouter tous les types de status pour afficher la position
+  return payload;
 }

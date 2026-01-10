@@ -1,4 +1,4 @@
 export type AlertState = {
-  alert: string | null;
+  alert: string;
   alertType: "error" | "success" | "info" | "warning" ; // A adapter selon material UI
 };

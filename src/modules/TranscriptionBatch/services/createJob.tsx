@@ -1,11 +1,12 @@
-import type { Audio } from "../../Shared/types/audio.types.ts";
+// Envoie un audio et reçois l'id d'un job 
+import type { Audio } from "../../../Shared/types/audio.types.ts";
 import { API_KEY } from "../config.ts"
+import { CreateJobAPIResponse } from '../../../Shared/types/createJobResponse.type.ts'
 
-// Envoie une requete POST et return un identifiant
 export async function createJob(
   audio: Audio,
   signal?: AbortSignal
-): Promise<string> {
+): Promise<CreateJobAPIResponse> {
 
   // Vérifie si des données sont manquantes
   if (!audio?.blob) throw new Error("Aucun fichier audio fourni.");
@@ -18,19 +19,15 @@ export async function createJob(
   formData.append("audioFile", audioFile);
 
   // Envoie de la requete
-  const response = await fetch("/api/batchTranscription/createJob", {
+  const response = await fetch("http://localhost:5000/api/batchTranscription/createJob", {
     method: "POST",
     headers: headers,
     body: formData,
     signal,
   });
 
-  if (!response.ok) {
-    throw new Error(`Erreur transcription: ${response.status} ${await response.text()}`);
-  }
+  if (!response.ok) throw new Error("Le serveur est injoignable");
 
   const payload = await response.json();
-  const job_uuid = payload.data.job_uuid;
-  
-  return job_uuid;
+  return payload;
 }

@@ -1,4 +1,4 @@
-import { useState, ReactNode } from "react"; // Ajout de ReactNode
+import { useState, ReactNode, createContext, useContext } from "react"; // Ajout de ReactNode
 import Divider from '@mui/material/Divider';
 import { styled, CSSObject, Theme } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
@@ -10,8 +10,6 @@ import { Typography } from "@mui/material";
 
 const drawerWidth = 240;
 
-// --- Mixins et Styles (inchangés mais conservés pour la cohérence) ---
-
 const openedMixin = (theme: Theme): CSSObject => ({
   width: drawerWidth,
   transition: theme.transitions.create('width', {
@@ -19,6 +17,7 @@ const openedMixin = (theme: Theme): CSSObject => ({
     duration: theme.transitions.duration.enteringScreen,
   }),
   overflowX: 'hidden',
+  overflowY: 'auto',
   position: 'relative', 
   height: '100%',
 });
@@ -29,6 +28,7 @@ const closedMixin = (theme: Theme): CSSObject => ({
     duration: theme.transitions.duration.leavingScreen,
   }),
   overflowX: 'hidden',
+  overflowY: 'auto',
   width: `calc(${theme.spacing(7)} + 1px)`,
   position: 'relative',
   height: '100%',
@@ -38,6 +38,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'flex-end',
+  overflowY: 'auto',
   position: 'relative',
   padding: theme.spacing(0, 1),
   ...theme.mixins.toolbar,
@@ -81,35 +82,37 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 // --- Interface pour les props ---
 interface ToolBoxProps {
-  children?: ReactNode; // Permet d'accepter n'importe quel composant React
+  children?: ReactNode;
+  open: boolean;
+  setOpen: (val: boolean) => void
 }
 
-export default function ToolBox({ children }: ToolBoxProps) {
-  const [open, setOpen] = useState<boolean>(true);
+export default function ToolBox({ children, open, setOpen }: ToolBoxProps) {
 
   return (
-    <Drawer variant="permanent" open={open} elevation={100}>
-      <DrawerHeader 
-      sx={{
-        display: 'flex',
-        justifyContent: 'space-between'
-      }}>
-        {open ? <Typography> Boite à outils </Typography>: <Typography> </Typography>}
-        <IconButton onClick={() => setOpen(!open)}>
-          {open ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-        </IconButton>
-      </DrawerHeader>
-      <Divider />
-      {/* Conteneur pour les enfants dynamiques */}
-      <Box sx={{ 
-        p: open ? 1 : 0,
-        display: 'flex', 
-        flexDirection: 'column',
-        alignItems: open ? 'flex-start' : 'left',
-        gap: 1
-      }}>
-        {children}
+      <Box sx= {{minHeight: "100%"}}>
+        <Drawer variant="permanent" open={open}>
+          <DrawerHeader 
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between'
+          }}>
+            {open ? <Typography> Boite à outils </Typography>: <Typography> </Typography>}
+            <IconButton onClick={() => setOpen(!open)}>
+              {open ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+            </IconButton>
+          </DrawerHeader>
+          <Divider />
+          {/* Conteneur pour les enfants dynamiques */}
+          <Box sx={{ 
+            width: '100%',
+            display: 'flex', 
+            flexDirection: 'column',
+            alignItems: open ? 'center' : 'left', 
+          }}>
+            {children}
+          </Box>
+        </Drawer>
       </Box>
-    </Drawer>
   );
 }

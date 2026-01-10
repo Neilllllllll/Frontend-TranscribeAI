@@ -1,5 +1,4 @@
 /* Componente for uploading audio files, it return the selected file to the parent component */
-import { env } from "../../../config/env.ts";
 // Import react hooks
 import { useRef } from "react";
 // Import components from material UI
@@ -11,21 +10,18 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import { AlertState } from "../types/alert.types.ts";
 import { Audio } from "../types/audio.types.ts";
+import { isAudioValid } from "../utils/validateAudio.tsx";
+import {useAlert} from '../contexts/AlertContext.tsx'
 
 interface AudioUploadProps {
   onUploadEnd: (audio: Audio) => void;
-  setAlert: (alert: AlertState) => void;
+  MAXSIZEBYTES_VAL: number
 }
 
-export default function AudioUpload({onUploadEnd, setAlert}: AudioUploadProps) {
-    const MAXSIZEBYTES_VAL = env.MAXSIZEBYTES;
-    
+export default function AudioUpload({onUploadEnd, MAXSIZEBYTES_VAL}: AudioUploadProps) {
     const inputRef = useRef<HTMLInputElement | null>(null);
 
-    // Sécurité : si la conversion échoue, on prend 20 par défaut
-    console.log(MAXSIZEBYTES_VAL);
-    const rawValue = parseInt(MAXSIZEBYTES_VAL || "20", 10);
-    const MAXSIZEBYTES = rawValue * 1048576; 
+    const {showAlert} = useAlert();
 
     const handleClick = () => {
         inputRef.current?.click();
@@ -35,23 +31,20 @@ export default function AudioUpload({onUploadEnd, setAlert}: AudioUploadProps) {
         const selectedFile = event.target.files?.[0];
         if (!selectedFile) return;
 
-        if (!selectedFile.type.startsWith("audio/")) {
-            setAlert({alert: "Le fichier n'est pas un fichier audio !", alertType: "error"});
-            return;
+        const result = isAudioValid(selectedFile, MAXSIZEBYTES_VAL);
+        // Cas où l'audio n'est pas valide et n'est pas enregistré
+        if(result !== true){
+            showAlert(result.message, result.type as AlertState["alertType"]);
         }
-
-        if (selectedFile.size > MAXSIZEBYTES) {
-            setAlert({
-                alert: `Le fichier dépasse la taille maximale autorisée (${rawValue} Mo) !`, 
-                alertType: "error"
-            });
-            return;
+        // Cas où l'audio a bien été enregistré
+        else{
+            showAlert("L'audio a bien été enregistré", "success");
+            const newAudio = {blob: selectedFile, mimeType: selectedFile.type, filename: selectedFile.name};
+            onUploadEnd(newAudio);
         }
-
-        const newAudio = {blob: selectedFile, mimeType: selectedFile.type, filename: selectedFile.name};
-        setAlert({alert: null, alertType: "info"});
-        onUploadEnd(newAudio);
+        event.target.value = "";
     };
+
     return (
     <>
         <input
@@ -63,10 +56,11 @@ export default function AudioUpload({onUploadEnd, setAlert}: AudioUploadProps) {
         />
         <ListItem disablePadding>
             <ListItemButton disabled={false} onClick={handleClick}>
-            <ListItemIcon>
-                <UploadFileIcon />
-            </ListItemIcon>
-            <ListItemText primary="Téléverser" />
+                <ListItemIcon>
+                    <UploadFileIcon />
+                </ListItemIcon>
+                <ListItemText primary="Téléverser" 
+                            secondary={"Max " + MAXSIZEBYTES_VAL + " Mo"}/>
             </ListItemButton>
         </ListItem>
     </>

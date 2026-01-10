@@ -1,6 +1,6 @@
 import { RouteObject } from "react-router-dom";
 import DiarizationPage from "./TranscriptionDiarizationPage.tsx"; 
-import { MODULE_ROUTES } from "../../config/routes.tsx";
+import { MODULE_ROUTES } from "../../Shared/routes.tsx";
 
 // On récupère la config spécifique à ce module
 const diarizationConfig = MODULE_ROUTES.find(route => route.id === 'diarization');

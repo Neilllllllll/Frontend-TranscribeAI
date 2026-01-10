@@ -2,8 +2,10 @@ export type JobStatus = "PENDING" | "PROCESSING" | "COMPLETED" | "FAILED";
 
 // Base commune à toutes les réponses
 interface BaseJobData {
-  job_id: string;
-  status: JobStatus;
+  data:{
+    status: JobStatus,
+    job_id: string
+  }
 }
 
 // Cas spécifiques
@@ -16,11 +18,22 @@ interface ProcessingData extends BaseJobData {
   status: "PROCESSING";
 }
 
+export interface TranscriptionSegment {
+  id: number;
+  start: number;
+  end: number;
+  text: string;
+}
+
+export interface TranscriptionResult {
+  full_text: string;
+  language: string;
+  segments: TranscriptionSegment[];
+}
+
 interface CompletedData extends BaseJobData {
   status: "COMPLETED";
-  result: {
-    transcription: string;
-  };
+  result: TranscriptionResult; 
   transcription_time: number;
 }
 
@@ -36,7 +49,7 @@ export type TranscriptionJobData =
   | CompletedData 
   | FailedData;
 
-export interface APIResponse {
+export interface getStatusAPIResponse {
   status: "success" | "error";
   data: TranscriptionJobData;
 }

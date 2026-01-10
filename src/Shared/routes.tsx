@@ -1,15 +1,17 @@
 import RecordVoiceOverIcon from '@mui/icons-material/RecordVoiceOver';
 import GroupsIcon from '@mui/icons-material/Groups';
+import { Module } from './types/module.type.ts';
+
 // Pour assurer la cohérence, les id ne doivent pas changer
 // La derniere route de fullPath doit être égale à path
-export const MODULE_ROUTES = [
+export const MODULE_ROUTES: Module[] = [
   {
     id: 'transcription',
-    title: "Transcription Batch",
+    title: "Transcription brute",
     description: "Convertissez vos fichiers audio volumineux en texte avec précision.",
     icon: <RecordVoiceOverIcon />,
-    path: "transcriptionBatch", // Chemin relatif pour le router
-    fullPath: "/app/transcriptionBatch", // Chemin absolu pour la navigation
+    path: "transcriptionBatch",
+    fullPath: "/app/transcriptionBatch",
     color: 'primary.main'
   },
   {

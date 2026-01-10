@@ -1,5 +1,5 @@
-import {env} from '../../config/env.ts'
+import {DiarizationEnv} from '../../core/config/env.ts'
 
-export const MAXTIMEPROCESSING = env.MAXTIMEPROCESSING;
-export const TIMEBETTWENEACHPOLLING = env.TIMEBETTWENEACHPOLLING;
-export const API_KEY = env.API_KEY;
+export const MAXTIMEPROCESSING = DiarizationEnv.MAXTIMEPROCESSING;
+export const TIMEBETTWENEACHPOLLING = DiarizationEnv.TIMEBETTWENEACHPOLLING;
+export const API_KEY = DiarizationEnv.API_KEY;
