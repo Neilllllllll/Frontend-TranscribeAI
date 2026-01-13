@@ -43,6 +43,9 @@ export const usePolling = (audio: Audio | null) : UseDiarizationReturn => {
         const maxAttempts = maxTime / pollInterval;
         let isComplete = false;
 
+        // Attente initiale avant le premier polling
+        await new Promise((r) => setTimeout(r, pollInterval));
+
         // 2. Polling Loop
         while (attempts < maxAttempts && !signal.aborted && !isComplete) {
           const payload = await getDiarizationByUuid(jobId);

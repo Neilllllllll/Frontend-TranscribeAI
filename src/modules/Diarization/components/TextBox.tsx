@@ -31,8 +31,8 @@ export default function TextBox({ template, onAssignSpeaker, availableProfiles, 
       elevation={0} 
       sx={{ 
         width: "100%", 
-        flex: 1,      // Remplace height: "70vh"
-        minHeight: 0, // Important pour le scroll interne
+        flex: 1,
+        minHeight: 0,
         p: 2, 
         display: "flex", 
         flexDirection: "column"

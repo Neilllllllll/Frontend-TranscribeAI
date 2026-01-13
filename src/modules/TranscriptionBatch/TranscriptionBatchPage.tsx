@@ -20,6 +20,8 @@ import { fullText } from "./utils/getText.tsx";
 // Import env
 import { MAXSIZEAUDIO } from "./config.ts"; 
 import { Divider } from "@mui/material";
+// Utilitaires
+import { formatTime } from '../../Shared/utils/formatTime.tsx';
 
 export default function TranscriptionBatchPage() {
   const { showAlert } = useAlert();
@@ -66,7 +68,7 @@ export default function TranscriptionBatchPage() {
     if (error) showAlert(error, "error");
     if (statusInfo) showAlert(statusInfo, "info");
     if (transcriptionPayload?.data.status === "COMPLETED"){
-      showAlert(`Succès ! Durée : ${transcriptionPayload.data.transcription_time}`, "success");
+      showAlert(`Succès ! Durée : ${formatTime(transcriptionPayload.data.transcription_time)}`, "success");
       setSegments(transcriptionPayload.data.result.segments); // Actualise les segments reçues 
     } 
   }, [error, statusInfo, transcriptionPayload, showAlert]);

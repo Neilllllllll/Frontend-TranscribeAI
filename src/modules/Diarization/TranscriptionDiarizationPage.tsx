@@ -8,6 +8,7 @@ import TextBox from './components/TextBox.tsx';
 import SpeakerManager from './components/SpeakerManager.tsx'
 import LoadingBarProgress from '../../Shared/components/loadingBarProgress.tsx';
 import Exporter from '../../Shared/components/Exporter.tsx'
+import WordReplacement from '../TranscriptionBatch/components/WordReplacement.tsx';
 // Type
 import type { Audio } from "../../Shared/types/audio.types.ts";
 import type { Speaker } from './types/ui_data.type.ts';
@@ -21,7 +22,7 @@ import { DiarizationResult } from './types/api_data.types.ts';
 // Utilitaires
 import { convertApiToUiData } from './utils/DataConverter.tsx';
 import { fullText } from './utils/getFullText.tsx';
-import WordReplacement from '../TranscriptionBatch/components/WordReplacement.tsx';
+import { formatTime } from '../../Shared/utils/formatTime.tsx';
 
 export default function DiarizationPage() {
   const { showAlert } = useAlert();
@@ -56,7 +57,7 @@ export default function DiarizationPage() {
     if (error) showAlert(error, "error");
     if (statusInfo) showAlert(statusInfo, "info");
     if (diarizationPayload?.data.status === "COMPLETED"){
-      showAlert(`Succès ! Durée : ${diarizationPayload.data.diarization_time}`, "success");
+      showAlert(`Succès ! Durée : ${formatTime(diarizationPayload.data.diarization_time)}`, "success");
       setDiarizationResult(diarizationPayload.data.result);
     } 
   }, [error, statusInfo, diarizationPayload, showAlert]);
