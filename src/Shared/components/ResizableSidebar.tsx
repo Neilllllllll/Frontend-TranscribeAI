@@ -30,6 +30,17 @@ const StyledSidebarContainer = styled(Box, {
   overflowX: 'hidden', // Cache le contenu horizontalement quand fermé
   flexShrink: 0,       // Empêche le panneau de s'écraser si le contenu principal est grand
   // L'ordre n'est pas nécessaire ici car il est géré par l'ordre du JSX dans le parent Flex
+
+  // On cible tous les ListItemText n'importe où à l'intérieur
+  '& .MuiListItemText-root': {
+    opacity: open ? 1 : 0,
+    transition: theme.transitions.create('opacity', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.shorter,
+    }),
+    // Optionnel : empêcher le texte de prendre de la place quand fermé
+    display: open ? 'block' : 'none', 
+  },
 }));
 
 interface ResizableSidebarProps {
@@ -73,10 +84,23 @@ export default function ResizableSidebar({
         justifyContent: open ? 'space-between' : 'center',
         minHeight: theme.spacing(8) // S'aligne avec la toolbar de MUI par exemple
       }}>
-        {open && <Typography variant="subtitle2" noWrap sx={{ ml: 1 }}>{title}</Typography>}
-        <IconButton onClick={onToggle}>
-          <ToggleIcon />
-        </IconButton>
+        {
+          side === "right" ? (
+            <>
+              <IconButton onClick={onToggle}>
+                <ToggleIcon />
+              </IconButton>
+              {open && <Typography variant="subtitle2" noWrap sx={{ ml: 1 }}>{title}</Typography>}
+            </>
+          ) : (
+            <>
+              {open && <Typography variant="subtitle2" noWrap sx={{ ml: 1 }}>{title}</Typography>}
+              <IconButton onClick={onToggle}>
+                <ToggleIcon />
+              </IconButton>
+            </>
+          )
+        }
       </Box>
       
       <Divider />

@@ -98,7 +98,7 @@ export default function TranscriptionBatchPage() {
       <ResizableSidebar 
         open={isSidebarOpen}
         onToggle={toggleSidebar}
-        side="right" // Optionnel, car "right" est la valeur par défaut
+        side="left" // Optionnel, car "right" est la valeur par défaut
         title="Boite à outils"
         expandedWidth={300} // Largeur personnalisée pour le côté droit
         collapsedWidth={50}

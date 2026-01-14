@@ -142,7 +142,7 @@ export default function DiarizationPage() {
         <ResizableSidebar 
         open={isLeftSidebarOpen}
         onToggle={toggleLeftSidebar}
-        side="right"
+        side="left"
         title="Boite à outils"
         expandedWidth={280} 
         collapsedWidth={50}

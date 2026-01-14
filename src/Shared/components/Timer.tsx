@@ -1,9 +1,8 @@
 /* Component that render a timer */
 // Import react hooks
 import { useState, useEffect } from "react";
-// Import components from material UI
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
+import ListItemText from '@mui/material/ListItemText';
+import { formatTime } from "../utils/formatTime.tsx";
 
 interface TimerProps {
   isRecording: boolean;
@@ -29,23 +28,12 @@ const Timer = ({isRecording, isPause}: TimerProps) => {
      if (!isRecording) setCount(0);
   }, [isRecording]);
 
-  const hh = Math.floor(count / 3600);
-  const mm = Math.floor(count / 60);
-  const ss = count % 60;
-  const pad = (n: number) => String(n).padStart(2, "0");
+  const format = formatTime(count);
 
   return (
-    <Box>
-      <Typography
-        sx={{
-          fontVariantNumeric: "tabular-nums",
-          color: (theme) => theme.palette.text.primary,
-          letterSpacing: "0.05em",
-        }}
-      >
-        {pad(hh)} : {pad(mm)} : {pad(ss)}
-      </Typography>
-    </Box>
+    <>
+      <ListItemText primary={format} />
+    </>
   );
 };
 
