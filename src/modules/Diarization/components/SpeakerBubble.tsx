@@ -100,7 +100,6 @@ export default function SpeakerBubble({ bubble, onAssignSpeaker, availableProfil
           <span
             contentEditable
             suppressContentEditableWarning
-            onBlur={(e) => handleManualEdit(i, e.currentTarget.innerText)}
           >
             {seg.text + " "}
           </span>
