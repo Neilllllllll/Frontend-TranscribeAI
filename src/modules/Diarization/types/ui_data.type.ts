@@ -1,25 +1,21 @@
-// Définitions des types pour les speakers dans la diarization
-import { ReactElement } from "react";
 // Définition du texte de diarization après traitement
 import type { DiarizationSegment } from "./api_data.types";
 
 export interface Speaker {
-  id: string;      // Important pour la gestion des listes
+  id: string;
   name: string;
-  color: string;   // Hexadécimal pour l'associer à la waveform/segments
-  icon?: ReactElement; 
+  color: string;
+  // icon: ReactElement; // Stocker une url plutot
 }
-
-export const SPEAKER_COLORS = [
-  '#1976d2', '#2e7d32', '#ed6c02', '#9c27b0', '#d32f2f', 
-  '#0288d1', '#7b1fa2', '#388e3c', '#fbc02d', '#c2185b'
-];
 
 export interface BulleTextDiarization {
   segments: DiarizationSegment[];
-  speaker: Speaker;
+  speakerId: string
 }
 
-export interface DiarizationTemplate {
-  textBubbles: BulleTextDiarization[];
+export interface DiarizationState {
+  // 1. La liste ordonnée (pour l'affichage chronologique)
+  conversationFlow: BulleTextDiarization[]; 
+  // 2. La "Base de données" des speakers (pour l'accès O(1))
+  speakersById: Record<string, Speaker>; 
 }

@@ -11,14 +11,14 @@ import Exporter from '../../Shared/components/Exporter.tsx'
 import WordReplacement from '../TranscriptionBatch/components/WordReplacement.tsx';
 // Type
 import type { Audio } from "../../Shared/types/audio.types.ts";
+import type { DiarizationState } from './types/ui_data.type.ts';
 import type { Speaker } from './types/ui_data.type.ts';
 // Hook
 import {useAlert} from '../../Shared/contexts/AlertContext.tsx'
-import { useState, useRef, useEffect, useMemo, useCallback } from "react";
+import { useState, useRef, useEffect } from "react";
 import { usePolling } from './hooks/usePolling.tsx';
 // Variable d'env
 import { MAXSIZEAUDIO } from "./config.ts"; 
-import { DiarizationResult } from './types/api_data.types.ts';
 // Utilitaires
 import { convertApiToUiData } from './utils/DataConverter.tsx';
 import { fullText } from './utils/getFullText.tsx';
@@ -26,10 +26,8 @@ import { formatTime } from '../../Shared/utils/formatTime.tsx';
 
 export default function DiarizationPage() {
   const { showAlert } = useAlert();
-  
-  const [nbSpeakers, setNbSpeakers] = useState<number>(1); // Nombre d'interlocuteurs définis par l'utilisateur
-  const [knowSpeakers, setKnowSpeakers] = useState<Speaker[]>([]); // Profils des speakers renvoyés par l'API
-  const [availableProfiles, setAvailableProfiles] = useState<Speaker[]>([]); // Profils des speakers définis par l'utilisateur
+
+  const [diarizationData, setDiarizationData] = useState<DiarizationState>({ conversationFlow: [], speakersById: {} });
 
   // États pour les sidebars
   const [isLeftSidebarOpen, setIsLeftSidebarOpen] = useState<boolean>(true);
@@ -42,15 +40,8 @@ export default function DiarizationPage() {
 
   // Récupération de la diarization via le hook
   const { diarizationPayload, isLoading, error, statusInfo } = usePolling(audio);
-  const [diarizationResult, setDiarizationResult] = useState<DiarizationResult>();
-
-  // Actualise le template de diarization
-  const diarizationTemplate = useMemo(() => {
-    if (diarizationResult) {
-      return convertApiToUiData(diarizationResult, knowSpeakers);
-    }
-    return { textBubbles: [] };
-  }, [diarizationResult, knowSpeakers]);
+  console.log('Flow de conv : ', diarizationData.conversationFlow);
+  console.log("liste des speakers : ", diarizationData.speakersById);
 
   // Actualisation du statuts
   useEffect(() => {
@@ -58,7 +49,7 @@ export default function DiarizationPage() {
     if (statusInfo) showAlert(statusInfo, "info");
     if (diarizationPayload?.data.status === "COMPLETED"){
       showAlert(`La transcription multi-voix est un succès ! Durée : ${formatTime(diarizationPayload.data.diarization_time)}`, "success");
-      setDiarizationResult(diarizationPayload.data.result);
+      setDiarizationData(convertApiToUiData(diarizationPayload.data.result));
     } 
   }, [error, statusInfo, diarizationPayload, showAlert]);
 
@@ -69,29 +60,20 @@ export default function DiarizationPage() {
         }
   };
 
-  // 2. La fonction pour changer un speaker
-  const handleAssignSpeaker = useCallback((apiSpeakerId: string, selectedProfile: Speaker) => {
-    setKnowSpeakers(prev => {
-      // On retire l'ancienne définition pour cet ID API s'il y en avait une
-      const others = prev.filter(s => s.id !== apiSpeakerId);
-      
-      // On crée la nouvelle définition :
-      // IMPORTANT : On garde l'ID API (spk_0) comme ID, mais on prend le nom/couleur du profil choisi
-      const newMapping: Speaker = {
-        ...selectedProfile,
-        id: apiSpeakerId 
-      };
-      
-      return [...others, newMapping];
-    });
-  }, []);
-
   const toggleLeftSidebar = () => {
     setIsLeftSidebarOpen(!isLeftSidebarOpen);
   };
   const toggleRightSidebar = () => {
     setIsRightSidebarOpen(!isRightSidebarOpen);
   };
+
+  // Fonction pour modifier un speaker dans la liste des speakers
+  const handleSpeakerChange = (apiSpeakerId: string, selectedProfile: Speaker) => {
+    setDiarizationData((prevData) => {
+      const updatedSpeakersById = { ...prevData.speakersById, [apiSpeakerId]: selectedProfile };
+      return { ...prevData, speakersById: updatedSpeakersById };
+    });
+  }
 
   // Affectation de l'audio
   const handleAudioSetter = (newAudio: Audio) => {
@@ -112,29 +94,30 @@ export default function DiarizationPage() {
 
   // Change un mot et ses occurrence par un autre
   const handleGlobalReplace = (search: string, replace: string) => {
-    const regex = new RegExp(search, 'gi');
-    setDiarizationResult(prevResult => {
-      if (!prevResult) return prevResult;
-      const newSegments = prevResult.segments.map(seg => ({
-        ...seg,
-        text: seg.text.replace(regex, replace)
-      }));
-      return {
-        ...prevResult,
-        segments: newSegments
-      };
-    });
-  };
-  // Change un segment précis
-  const handleManualEdit = (id: number, newText: string) => {
-     setDiarizationResult(prevResult => 
-       prevResult ? {
-         ...prevResult,
-         segments: prevResult.segments.map((s, index) => index === id ? { ...s, text: newText } : s)
-       } : prevResult
-     );
+    const regex = new RegExp(search, 'gi'); 
+    setDiarizationData((prevData) => {
+      const updatedConversationFlow = prevData.conversationFlow.map((bubble) => {
+        const updatedSegments = bubble.segments.map((seg) => ({
+          ...seg,
+          text: seg.text.replace(regex, replace)
+        }));
+        return { ...bubble, segments: updatedSegments };
+      });
+      return { ...prevData, conversationFlow: updatedConversationFlow };
+    }); 
   };
 
+  const handleManualEdit = (objectId: number, segmentId: number, newText: string) => {
+    setDiarizationData(prevData => {
+      const updatedConversationFlow = [...prevData.conversationFlow];
+      const updatedBubble = { ...updatedConversationFlow[objectId] };
+      const updatedSegments = [...updatedBubble.segments];
+      updatedSegments[segmentId] = { ...updatedSegments[segmentId], text: newText };
+      updatedBubble.segments = updatedSegments;
+      updatedConversationFlow[objectId] = updatedBubble;
+      return { ...prevData, conversationFlow: updatedConversationFlow };
+    });
+  };
 
   return (
     <Box sx={{ display: 'flex', width: '100%', height: "100%"}}>
@@ -165,7 +148,7 @@ export default function DiarizationPage() {
             <WordReplacement onReplace={handleGlobalReplace} />
           </Box>
           <Box>
-            <Exporter textToExport={fullText(diarizationTemplate)}/>
+            <Exporter textToExport={fullText(diarizationData)}/>
           </Box>
         </>  
         }
@@ -189,12 +172,12 @@ export default function DiarizationPage() {
           overflow: 'hidden'
         }}>
           {/* Texte box où sera afficher les segments de texte récupérés */}
-          <TextBox template={diarizationTemplate} 
-          onAssignSpeaker={handleAssignSpeaker} 
-          availableProfiles={availableProfiles} 
-          currentTime={currentTime} 
-          gotoTimestamp={goToTimestamp} 
-          handleManualEdit={handleManualEdit} />
+          <TextBox 
+            diarizationData={diarizationData}
+            currentTime={currentTime}
+            gotoTimestamp={goToTimestamp}
+            handleManualEdit={handleManualEdit}
+          />
           { isLoading && <LoadingBarProgress /> }
           <AudioPlayer ref={audioRef} audio = {audio} setCurrentTime={setCurrentTime} />
         </Box>
@@ -205,11 +188,15 @@ export default function DiarizationPage() {
         open={isRightSidebarOpen}
         onToggle={toggleRightSidebar}
         side="right"
-        title="Outils de l'éditeur"
+        title="Gestion des locuteurs"
         expandedWidth={240} 
         collapsedWidth={50}
         >
-          <SpeakerManager setNbSpeakers={setNbSpeakers} setSpeakers={setAvailableProfiles} nbSpeakers={nbSpeakers} speakers={availableProfiles}/>
+          <SpeakerManager 
+            speakersList={Object.values(diarizationData.speakersById)}  
+            onSpeakersChange={handleSpeakerChange}
+            open={isRightSidebarOpen}
+          />
         </ResizableSidebar>
       </Box>
     </Box>

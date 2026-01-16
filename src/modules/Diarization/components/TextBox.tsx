@@ -1,19 +1,16 @@
 import { Paper, Box, Typography } from "@mui/material";
-import type { DiarizationTemplate } from "../types/ui_data.type";
+import type { DiarizationState } from "../types/ui_data.type";
 import SpeakerBubble from "./SpeakerBubble.tsx";
-import type { Speaker } from "../types/ui_data.type";
 import { useEffect, useRef } from "react";
 
 interface TextBoxProps {
-  template: DiarizationTemplate;
-  onAssignSpeaker: (apiSpeakerId: string, selectedProfile: Speaker) => void;
-  availableProfiles: Speaker[];
+  diarizationData: DiarizationState;
   currentTime: number;
   gotoTimestamp: (time: number) => void;
-  handleManualEdit: (id: number, newText: string) => void;
+  handleManualEdit: (objectId: number, segmentId: number, newText: string) => void;
 }
 
-export default function TextBox({ template, onAssignSpeaker, availableProfiles, currentTime, gotoTimestamp, handleManualEdit }: TextBoxProps) {
+export default function TextBox({ diarizationData, currentTime, gotoTimestamp, handleManualEdit }: TextBoxProps) {
   const activeSegmentRef = useRef<HTMLSpanElement>(null);
 
   // 2. Scroll automatique vers le segment actif
@@ -42,19 +39,19 @@ export default function TextBox({ template, onAssignSpeaker, availableProfiles, 
         overflowY: "auto",
         pr: 1         // Petit padding pour la scrollbar
       }}>
-        {template.textBubbles.length === 0 ? 
+        {diarizationData.conversationFlow.length === 0 ? 
         <Typography>Votre transcription s'affichera ici... </Typography> :
-        template.textBubbles.map((bubble, index) => (
+        diarizationData.conversationFlow.map((bubble, index) => (
           // Utiliser une clé unique combinant index et ID speaker pour la stabilité React
           <SpeakerBubble 
-            key={`${bubble.speaker.id}-${index}`} 
-            bubble={bubble} 
-            onAssignSpeaker={onAssignSpeaker}
-            availableProfiles={availableProfiles}
+            key={`${bubble.speakerId}-${index}`} 
+            segments={bubble.segments} 
+            speaker={diarizationData.speakersById[bubble.speakerId]}
             currentTime={currentTime}
+            handleManualEdit={handleManualEdit}
+            objectId={index}
             activeSegmentRef={activeSegmentRef}
             goToTimestamp={gotoTimestamp}
-            handleManualEdit={handleManualEdit}
           />))
         }
       </Box>

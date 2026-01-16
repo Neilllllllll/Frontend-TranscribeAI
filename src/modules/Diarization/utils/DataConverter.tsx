@@ -1,32 +1,28 @@
-import { BulleTextDiarization } from '../types/ui_data.type';
+import { BulleTextDiarization, Speaker } from '../types/ui_data.type';
 import { DiarizationResult } from '../types/api_data.types';
-import {DiarizationTemplate, Speaker as SpeakerType} from '../types/ui_data.type';
+import {DiarizationState, Speaker as SpeakerType} from '../types/ui_data.type';
 
-/**
- * Fonction utilitaire pour trouver ou générer un Speaker par défaut
- */
-const getSpeakerDetails = (speakerId: string, knownSpeakers: SpeakerType[]): SpeakerType => {
-  const found = knownSpeakers.find(s => s.id === speakerId);
-  if (found) return found;
-
-  // Fallback si le speaker n'est pas connu (génération dynamique ou placeholder)
+function generateRandomSpeaker(speakerId: string): SpeakerType {
+  const randomColor = '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
   return {
     id: speakerId,
     name: `Interlocuteur ${speakerId}`,
-    color: '#ccc', // Gris par défaut
+    color: randomColor
   };
-};
+}
+
 // Convertit les données de l'API en format utilisable par l'UI
 export const convertApiToUiData = (
   apiResult: DiarizationResult, 
-  knownSpeakers: SpeakerType[]
-): DiarizationTemplate => {
+): DiarizationState => {
+  // Map qui recupère les speakers de l'API
+  let speakersMap: Record<string, SpeakerType> = {}; 
   const bubbles: BulleTextDiarization[] = [];
   let currentBubble: BulleTextDiarization | null = null;
 
   apiResult.segments.forEach((segment) => {
     // Cas 1 : C'est le tout premier segment ou le speaker change
-    if (!currentBubble || currentBubble.speaker.id !== segment.speaker) {
+    if (!currentBubble || currentBubble.speakerId !== segment.speaker) {
       // Si une bulle était en cours, on la sauvegarde
       if (currentBubble) {
         bubbles.push(currentBubble);
@@ -34,9 +30,13 @@ export const convertApiToUiData = (
 
       // On initie une nouvelle bulle
       currentBubble = {
-        speaker: getSpeakerDetails(segment.speaker, knownSpeakers),
+        speakerId: segment.speaker,
         segments: [segment]
       };
+      // Récupère le speaker dans la map ou l'ajoute s'il n'existe pas
+      if (!speakersMap[segment.speaker]) {
+        speakersMap[segment.speaker] = generateRandomSpeaker(segment.speaker)
+      }
     } 
     // Cas 2 : C'est toujours le même speaker
     else {
@@ -49,5 +49,5 @@ export const convertApiToUiData = (
     bubbles.push(currentBubble);
   }
 
-  return { textBubbles: bubbles };
+  return { conversationFlow: bubbles, speakersById: speakersMap };
 };

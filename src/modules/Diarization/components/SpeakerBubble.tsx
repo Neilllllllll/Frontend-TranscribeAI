@@ -2,41 +2,26 @@ import {
   Box, 
   Paper, 
   Typography, 
-  Avatar, 
-  Select, 
-  MenuItem, 
-  FormControl, 
-  InputLabel, 
+  Avatar,
   Stack,
   Divider,
-  SelectChangeEvent,
   useTheme
 } from '@mui/material';
-import type { Speaker, BulleTextDiarization } from '../types/ui_data.type';
+import type { Speaker } from '../types/ui_data.type';
+import type { DiarizationSegment } from '../types/api_data.types';
 
 interface SpeakerBubbleProps {
-  bubble: BulleTextDiarization;
-  onAssignSpeaker: (apiId: string, profile: Speaker) => void;
+  segments: DiarizationSegment[];
+  speaker: Speaker;
   goToTimestamp: (time: number) => void;
-  availableProfiles: Speaker[];
   currentTime: number;
   activeSegmentRef: React.RefObject<HTMLSpanElement> | null;
-  handleManualEdit: (id: number, newText: string) => void;
+  handleManualEdit?: (objectId: number, segmentId: number, newText: string) => void;
+  objectId?: number;
 }
 
-export default function SpeakerBubble({ bubble, onAssignSpeaker, availableProfiles, currentTime, activeSegmentRef, goToTimestamp, handleManualEdit }: SpeakerBubbleProps) {
-  const { speaker, segments } = bubble;
+export default function SpeakerBubble({ segments, speaker, goToTimestamp, currentTime, activeSegmentRef, handleManualEdit, objectId }: SpeakerBubbleProps) {
   const theme = useTheme();
-  const handleChange = (event: SelectChangeEvent) => {
-    const selectedProfileId = event.target.value;
-    const profile = availableProfiles.find(p => p.id === selectedProfileId);
-    if (profile) {
-      onAssignSpeaker(speaker.id, profile);
-    }
-  };
-
-  // Helper pour extraire les initiales si pas d'icône
-  const getInitials = (name: string) => name.split(' ').map(n => n[0]).join('').toUpperCase();
 
   return (
     <Paper 
@@ -51,34 +36,11 @@ export default function SpeakerBubble({ bubble, onAssignSpeaker, availableProfil
       {/* Header : Infos Speaker + Sélecteur */}
       <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} sx={{ mb: 2 }}>
         <Stack direction="row" alignItems="center" spacing={1.5}>
-          <Avatar 
-            sx={{ bgcolor: speaker.color, width: 32, height: 32, fontSize: '0.875rem' }}
-          >
-            {speaker.icon ? speaker.icon : getInitials(speaker.name)}
-          </Avatar>
+          <Avatar sx={{ bgcolor: speaker.color, width: 32, height: 32, fontSize: '0.875rem' }} />
           <Typography variant="subtitle1" fontWeight="bold" sx={{ color: speaker.color }}>
             {speaker.name}
           </Typography>
         </Stack>
-
-        <FormControl size="small" sx={{ minWidth: 150 }}>
-          <InputLabel id={`select-speaker-${speaker.id}`}>Changer le locuteur</InputLabel>
-          <Select
-            labelId={`select-speaker-${speaker.id}`}
-            value="" // On le laisse vide pour forcer l'action de changement
-            label="Changer le locuteur"
-            onChange={handleChange}
-          >
-            {availableProfiles.map((p) => (
-              <MenuItem key={p.id} value={p.id}>
-                <Stack direction="row" alignItems="center" spacing={1} width={"100%"}>
-                  <Box sx={{ width: 12, height: 12, borderRadius: '50%', bgcolor: p.color }} />
-                  <Typography variant="body2">{p.name}</Typography>
-                </Stack>
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
       </Stack>
 
       <Divider sx={{ mb: 2, opacity: 0.6 }} />
@@ -100,6 +62,7 @@ export default function SpeakerBubble({ bubble, onAssignSpeaker, availableProfil
           <span
             contentEditable
             suppressContentEditableWarning
+            onBlur={(e) => handleManualEdit ? handleManualEdit(objectId!, i, e.currentTarget.innerText) : null}
           >
             {seg.text + " "}
           </span>
