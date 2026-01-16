@@ -30,7 +30,15 @@ export default function TextBox({ segments, currentTime, goToTimestamp, onSegmen
   }, [currentTime]);
 
 return (
-    <Paper elevation={0} sx={{ width: "100%", height: "70vh", p: 2, 'display': "flex", "flexDirection": "column"}}>
+    <Paper elevation={0}       
+      sx={{ 
+        width: "100%", 
+        flex: 1,
+        minHeight: 0,
+        p: 2, 
+        display: "flex", 
+        flexDirection: "column"
+      }}>
       <Box>
         <CopyButton textToCopy={fullText(segments ?? [])}></CopyButton>
       </Box>
