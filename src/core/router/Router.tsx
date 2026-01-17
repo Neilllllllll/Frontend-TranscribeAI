@@ -1,4 +1,5 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
+import { streamingRoutes } from "../../modules/Streaming/routes.tsx";
 import { transcriptionRoutes } from "../../modules/TranscriptionBatch/routes.tsx";
 import { diarizationRoutes } from "../../modules/Diarization/routes.tsx"
 import { ProtectedRoute } from "./ProtectedRoute.tsx";
@@ -32,6 +33,7 @@ export const router = createBrowserRouter([
         children: [
           ...transcriptionRoutes,
           ...diarizationRoutes,
+          ...streamingRoutes
         ],
       },
     ],

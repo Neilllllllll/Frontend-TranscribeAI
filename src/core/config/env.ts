@@ -12,3 +12,7 @@ export const DiarizationEnv = {
     TIME_BETWEEN_EACH_POLLING: process.env.REACT_APP_TIME_BETWEEN_EACH_POLLING_DIARIZATION,
     MAX_SPEAKERS: process.env.REACT_APP_MAX_SPEAKERS_DIARIZATION,
 };
+
+export const StreamingEnv = {
+    API_KEY: process.env.REACT_APP_API_KEY,
+};

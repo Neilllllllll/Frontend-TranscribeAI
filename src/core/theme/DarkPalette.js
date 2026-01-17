@@ -43,6 +43,10 @@ const darkPalette = createTheme({
       fontWeight: 500 
     },
   },
+  disabled: {
+    main: '#6c6f73',
+    contrastText: '#ffffff',
+  },
   shape: {
     borderRadius: 12, 
   },

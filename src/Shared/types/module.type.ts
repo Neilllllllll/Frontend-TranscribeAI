@@ -21,7 +21,6 @@ export interface Module {
   
   /** Chemin absolu utilisé pour les liens de navigation (ex: '/app/diarization') */
   fullPath: string;
-  
-  /** Clé de couleur basée sur le thème MUI (ex: 'primary.main') */
-  color: string;
+
+  enable?: boolean; // Indique si le module est actif ou non
 }

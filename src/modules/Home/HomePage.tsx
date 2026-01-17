@@ -23,7 +23,7 @@ export default function HomePage() {
           component="img" 
           src={logo}
           alt="Logo" 
-          sx={{ width: 80, height: 80 }} 
+          sx={{ width: 120, height: 120 }} 
         />
         <Typography variant="h3" component="h1" fontWeight="bold" textAlign="center">
           Transcribe AI Suite
@@ -37,11 +37,11 @@ export default function HomePage() {
       <Grid container spacing={4}>
         {MODULE_ROUTES.map((module, index) => (
           <Grid size={{ xs: 12, sm: 6, md: 4 }} key={index}>
-            <Card elevation={3} sx={{ height: '100%', borderRadius: 4 }}>
+            <Card elevation={module.enable === false ? 0 : 3} sx={{ height: '100%', borderRadius: 4 }}>
               <CardActionArea 
                 onClick={() => navigate(module.fullPath)}
-                sx={{ height: '100%', p: 2 }}
-              >
+                disabled={module.enable === false}
+                sx={{ height: '100%', p: 2, "&.Mui-disabled": { cursor: "not-allowed", pointerEvents: "auto"}}}>
                 <CardContent>
                   <Box sx={{ mb: 2 }}>
                     {module.icon}

@@ -93,6 +93,15 @@ export default function MainLayout() {
               label={route.title}
               value={route.fullPath}
               icon={route.icon}
+              disabled={route.enable === false}
+              sx={{
+                // Style spécifique pour l'état disabled
+                "&.Mui-disabled": {
+                  cursor: "not-allowed", // Change le curseur pour indiquer que c'est désactivé
+                  pointerEvents: "auto", // Permet d'afficher le curseur même si c'est désactivé
+                  color: "text.disabled", // Grise le texte et l'icône
+                }
+              }}
             />
           ))}
         </BottomNavigation>
