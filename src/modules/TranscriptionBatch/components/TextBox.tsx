@@ -56,7 +56,7 @@ return (
               onClick={() => goToTimestamp?.(segment.start)}
               sx={{
                 display: 'inline', 
-                backgroundColor: isActive ? theme.palette.text.highlight : 'transparent',
+                backgroundColor: isActive ? theme.palette.secondary.main : 'transparent',
                 wordBreak: 'break-word'
               }}
             >

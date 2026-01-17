@@ -54,7 +54,7 @@ export default function SpeakerBubble({ segments, speaker, goToTimestamp, curren
           ref={isActive ? activeSegmentRef : null} 
           sx={{ 
           display: 'inline', 
-          backgroundColor: isActive ? theme.palette.text.highlight : 'transparent',
+          backgroundColor: isActive ? theme.palette.secondary.main : 'transparent',
           wordBreak: 'break-word'
           }} 
           onClick={() => goToTimestamp?.(seg.start)} 

@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { Box, Divider, Typography, IconButton, styled, useTheme } from "@mui/material";
+import { Box, Divider, Typography, IconButton, styled } from "@mui/material";
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
@@ -62,7 +62,6 @@ export default function ResizableSidebar({
   expandedWidth = defaultExpandedWidth,
   collapsedWidth = defaultCollapsedWidth,
 }: ResizableSidebarProps) {
-  const theme = useTheme();
 
   // Déterminer l'icône appropriée pour le basculement
   const ToggleIcon = side === "left" 
@@ -82,7 +81,6 @@ export default function ResizableSidebar({
         display: 'flex', 
         alignItems: 'center', 
         justifyContent: open ? 'space-between' : 'center',
-        minHeight: theme.spacing(8) // S'aligne avec la toolbar de MUI par exemple
       }}>
         {
           side === "right" ? (

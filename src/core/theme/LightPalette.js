@@ -2,37 +2,40 @@ import { createTheme } from '@mui/material/styles';
 
 const lightPalette = createTheme({
   palette: {
-    mode: 'light',
-
+    mode: 'light', // Changez en 'dark' pour le mode sombre
+    primary: {
+      main: '#04B2D9',      // La couleur de vos boutons principaux
+      light: '#049DD9',
+      dark: '#010440',
+      contrastText: '#fff', // Couleur du texte sur fond primaire
+    },
+    secondary: {
+      main: '#9c27b0',      // Utilisé pour les actions secondaires
+    },
+    error: {
+      main: '#d32f2f',
+    },
+    warning: {
+      main: '#ed6c02',
+    },
+    info: {
+      main: '#0288d1',
+    },
+    success: {
+      main: '#2e7d32',
+    },
     background: {
-      primary: '#0D0D0D',
-      secondary: '#3F3F45',
-      default: '#272727',
+      default: '#ffffff', // Couleur de fond de vos pages
+      paper: '#f4f7f6',     // Couleur de fond des cartes/menus
     },
-
-    text: {
-      primary: '#FFFFFF',
-      secondary: '#A1A1A3',
-      error: '#F43D50',
-      success: '#28FFBB',
-      link: '#00d0ffc2',
-      highlight: '#007C82',
-    },
-
-    component: {
-      highlight: '#007C82',
-    }
   },
-
   typography: {
-    h1: { fontWeight: 600, fontSize: 'clamp(2rem, 4vw + 1rem, 2.5rem)', color: '#E5E5E7' },
-    h2: { fontWeight: 500, fontSize: 'clamp(1.75rem, 3vw + 0.5rem, 2rem)', color: '#E5E5E7' },
-    h3: { fontWeight: 500, fontSize: 'clamp(1.5rem, 2.5vw + 0.5rem, 1.75rem)', color: '#E5E5E7' },
-    h4: { fontWeight: 500, fontSize: 'clamp(1.25rem, 2vw + 0.5rem, 1.5rem)', color: '#E5E5E7' },
-    h5: { fontWeight: 500, fontSize: 'clamp(1.1rem, 1.5vw + 0.4rem, 1.25rem)', color: '#E5E5E7' },
-    h6: { fontWeight: 500, fontSize: 'clamp(0.9rem, 1.2vw + 0.3rem, 1rem)', color: '#E5E5E7' },
-    body1: { fontWeight: 400, fontSize: 'clamp(0.9rem, 1vw + 0.3rem, 1rem)', lineHeight: 1.6, color: '#A1A1A3' },
-    p: { fontWeight: 500, fontSize: 'clamp(0.8rem, 0.8vw + 0.3rem, 0.875rem)', color: '#A1A1A3' },
+    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+    h1: { fontSize: '2.5rem', fontWeight: 600, color: '#010440' },
+    button: { textTransform: 'none' }, // Désactive les majuscules automatiques
+  },
+  shape: {
+    borderRadius: 8, // Arrondi global des boutons et cartes
   },
 });
 
