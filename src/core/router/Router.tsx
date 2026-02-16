@@ -1,13 +1,14 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import { streamingRoutes } from "../../modules/Streaming/routes.tsx";
-import { transcriptionRoutes } from "../../modules/TranscriptionBatch/routes.tsx";
-import { diarizationRoutes } from "../../modules/Diarization/routes.tsx"
+import { transcriptionRoutes } from "../../modules/MonoVoix/routes.tsx";
+import { diarizationRoutes } from "../../modules/MultiVoix/routes.tsx"
 import { ProtectedRoute } from "./ProtectedRoute.tsx";
 import {AlertProvider} from '../../Shared/contexts/AlertContext.tsx'
 import HomePage from "../../modules/Home/HomePage.tsx";
 import AuthPage from "../../modules/Auth/AuthPage.tsx";
 import MainLayout from "../../Shared/layouts/MainLayout.tsx";
 import NotFoundPage from "../../Shared/pages/NotFoundPage.tsx";
+import AidePage from "../../modules/Aide/AidePage.tsx"
 
 export const router = createBrowserRouter([
   // 1. Redirection initiale
@@ -31,11 +32,12 @@ export const router = createBrowserRouter([
         path: "/app",
         element: (<AlertProvider><MainLayout /></AlertProvider>),
         children: [
-          ...transcriptionRoutes,
           ...diarizationRoutes,
+          ...transcriptionRoutes,
           ...streamingRoutes
         ],
       },
+      {path: "aide", index: true, element: <AidePage />},
     ],
   },
 

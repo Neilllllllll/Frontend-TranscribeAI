@@ -1,4 +1,4 @@
-import { BulleTextDiarization, Speaker } from '../types/ui_data.type';
+import { BulleTextDiarization } from '../types/ui_data.type';
 import { DiarizationResult } from '../types/api_data.types';
 import {DiarizationState, Speaker as SpeakerType} from '../types/ui_data.type';
 

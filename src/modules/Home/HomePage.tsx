@@ -5,12 +5,15 @@ import {
   Card, 
   CardContent, 
   CardActionArea, 
-  Stack 
+  Stack, 
+  Tooltip,
+  IconButton
 } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import { useNavigate } from 'react-router-dom';
 import logo from "../../Shared/assets/logo.svg"
-import { MODULE_ROUTES } from '../../Shared/routes.tsx';
+import { MODULE_ROUTES } from '../../core/router/routes.tsx';
+import HelpIcon from '@mui/icons-material/Help';
 
 export default function HomePage() {
   const navigate = useNavigate();
@@ -25,11 +28,18 @@ export default function HomePage() {
           alt="Logo" 
           sx={{ width: 120, height: 120 }} 
         />
-        <Typography variant="h3" component="h1" fontWeight="bold" textAlign="center">
-          Transcribe AI Suite
-        </Typography>
+        <Box sx={{ display : 'flex', gap : 1}}>
+          <Typography variant="h3" component="h1" fontWeight="bold" textAlign="center">
+            Transcribe AI Suite
+          </Typography>
+          <Tooltip title="Aide">
+            <IconButton onClick={() => navigate("/aide")}>
+              <HelpIcon />
+            </IconButton>
+          </Tooltip>
+        </Box>
         <Typography variant="h6" color="text.secondary" textAlign="center">
-          Choisissez un outil pour commencer à traiter vos fichiers audio.
+          Une collection d'outils de transcription alimentés par l'IA pour répondre à tous vos besoins de conversion audio-texte.
         </Typography>
       </Stack>
 
@@ -44,7 +54,11 @@ export default function HomePage() {
                 sx={{ height: '100%', p: 2, "&.Mui-disabled": { cursor: "not-allowed", pointerEvents: "auto"}}}>
                 <CardContent>
                   <Box sx={{ mb: 2 }}>
-                    {module.icon}
+                    {module.icon.map((icon, iconIndex) => (
+                      <Box key={iconIndex} component="span" sx={{ mr: 1 }}>
+                        {icon}
+                      </Box>
+                    ))}
                   </Box>
                   <Typography gutterBottom variant="h5" component="div" fontWeight="medium">
                     {module.title}

@@ -6,7 +6,6 @@ import ResizableSidebar from '../../Shared/components/ResizableSidebar.tsx'
 import TextBox from './components/TextBox.tsx';
 import AudioUpload from '../../Shared/components/AudioUpload.tsx';
 import AudioPlayer from '../../Shared/components/AudioPlayer.tsx';
-import AudioRecorder from '../../Shared/components/AudioRecorder.tsx';
 import LoadingBarProgress from '../../Shared/components/loadingBarProgress.tsx';
 import {useAlert} from '../../Shared/contexts/AlertContext.tsx'
 import type { Audio } from "../../Shared/types/audio.types.ts";
@@ -115,7 +114,6 @@ export default function TranscriptionBatchPage() {
           </Divider>
         }
         <Box sx={{ p: isSidebarOpen ? 1 : 0, width: '100%', display: 'flex', flexDirection: 'column', gap: 1 }}>
-          <AudioRecorder onRecordEnd={handleAudioSetter} />
           <AudioUpload onUploadEnd={handleAudioSetter} MAXSIZEBYTES_VAL={MAXSIZEAUDIO}/>
         </Box>
 
@@ -129,10 +127,18 @@ export default function TranscriptionBatchPage() {
           <Box sx={{ p: 1, width: '100%' }}>
             <WordReplacement onReplace={handleGlobalReplace} />
           </Box>
-          <Box>
-            <Exporter textToExport={fullText(segments ?? [])}/>
-          </Box>
-        </>
+        </>}
+        {/* Section 3 : Options d'exportation */}
+        { 
+          <>
+            {isSidebarOpen && 
+            <Divider sx={{ my: 2, width: '90%' }}>
+              <Chip label="Options d'exportation" size="small" sx={{ fontSize: '0.65rem' }} />
+            </Divider>}
+            <Box>
+              <Exporter textToExport={fullText(segments ?? [])}/>
+            </Box>
+          </>
         }
         </ResizableSidebar>
       {/* Main */}

@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { createJob } from "../services/createJob.tsx";
 import { getTranscriptionByUuid } from "../services/getTranscritpion.tsx";
-import type { Audio } from "../../../Shared/types/audio.types";
+import type { Audio } from "../../../Shared/types/audio.types.ts";
 import type { getStatusAPIResponse } from "../types/api_data.ts";
 import { MAXTIMEPROCESSING, TIMEBETTWENEACHPOLLING } from "../config.ts";
 

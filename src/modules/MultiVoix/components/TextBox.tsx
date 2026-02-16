@@ -1,5 +1,5 @@
 import { Paper, Box, Typography } from "@mui/material";
-import type { DiarizationState } from "../types/ui_data.type";
+import type { DiarizationState } from "../types/ui_data.type.ts";
 import SpeakerBubble from "./SpeakerBubble.tsx";
 import { useEffect, useRef } from "react";
 import DeleteButton from "../../../Shared/components/DeleteButton.tsx";

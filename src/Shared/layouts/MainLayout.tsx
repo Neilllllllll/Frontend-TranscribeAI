@@ -11,7 +11,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import { IconButton } from '@mui/material';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import NightsStayIcon from '@mui/icons-material/NightsStay';
-import {MODULE_ROUTES} from '../routes.tsx'
+import {MODULE_ROUTES} from '../../core/router/routes.tsx'
 import logo from '../assets/logo.svg';
 import { useTheme } from '@mui/material/styles';
 import Alert from '@mui/material/Alert';
@@ -49,7 +49,7 @@ export default function MainLayout() {
             component="img" 
             src={logo}
             alt="Logo" 
-            onClick={handleChange.bind(null, null, '/home')}
+            onClick={() => navigate('/home')}
             sx={{ width: 60, height: 60, cursor: 'pointer' }} 
           />
 
@@ -70,14 +70,14 @@ export default function MainLayout() {
                 key={route.id}
                 label={route.title}
                 value={route.fullPath}
-                icon={route.icon}
+                icon={route.icon[0]}
                 disabled={route.enable === false}
                 sx={{
                   // Style spécifique pour l'état disabled
                   "&.Mui-disabled": {
-                    cursor: "not-allowed", // Change le curseur pour indiquer que c'est désactivé
-                    pointerEvents: "auto", // Permet d'afficher le curseur même si c'est désactivé
-                    color: "text.disabled", // Grise le texte et l'icône
+                    cursor: "not-allowed",
+                    pointerEvents: "auto",
+                    color: "text.disabled",
                   }
                 }}
               />

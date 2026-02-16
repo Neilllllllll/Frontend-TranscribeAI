@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { MODULE_ROUTES } from '../routes.tsx';
+import { MODULE_ROUTES } from '../../core/router/routes.tsx';
 import type { Module } from '../types/module.type.ts';
 
 export function useGetCurrentMode() {

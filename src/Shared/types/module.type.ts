@@ -14,7 +14,7 @@ export interface Module {
   description: string;
   
   /** Composant d'icône React (généralement une icône MUI) */
-  icon: ReactElement;
+  icon: ReactElement[];
   
   /** Chemin relatif utilisé pour la configuration des routes (ex: 'diarization') */
   path: string;

@@ -1,6 +1,6 @@
 import { RouteObject } from "react-router-dom";
 import TranscriptionBatchPage from "./TranscriptionBatchPage.tsx"; 
-import { MODULE_ROUTES } from "../../Shared/routes.tsx";
+import { MODULE_ROUTES } from "../../core/router/routes.tsx";
 
 // On récupère la config spécifique à ce module
 const transcriptionConfig = MODULE_ROUTES.find(route => route.id === 'transcription');
