@@ -39,13 +39,8 @@ export default function StreamingPage() {
 
   // Affectation de l'audio
   const handleAudioSetter = (newAudio: Audio) => {
-    setAudio((prevAudio) => {
+    setAudio(() => {
       // Si on a déjà un audio et que le blob est le même, on ne change rien
-      // (Le re-render ne sera pas déclenché)
-      if (prevAudio?.filename === newAudio.filename && prevAudio?.blob.size === newAudio.blob.size) {
-        showAlert("Vous venez d'envoyer le même audio", "info");
-        return prevAudio;
-      }
       return {
         blob: newAudio.blob,
         mimeType: newAudio.mimeType,
