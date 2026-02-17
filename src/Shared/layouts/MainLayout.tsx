@@ -27,7 +27,6 @@ export default function MainLayout() {
   const theme = useTheme();
   const colorMode = useColorMode();
 
-
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     hideAlert()
     navigate(newValue);

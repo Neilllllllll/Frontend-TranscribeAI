@@ -59,7 +59,10 @@ export default function AudioUpload({onUploadEnd, MAXSIZEBYTES_VAL}: AudioUpload
                 <ListItemIcon>
                     <UploadFileIcon />
                 </ListItemIcon>
-                <ListItemText primary={"Téléverser : Max " + MAXSIZEBYTES_VAL + " Mo" }/>
+                <ListItemText
+                    primary={"Téléverser"}
+                    secondary={"Max " + MAXSIZEBYTES_VAL + " Mo"}
+                />
             </ListItemButton>
         </ListItem>
     </>

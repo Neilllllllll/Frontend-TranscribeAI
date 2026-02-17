@@ -20,7 +20,13 @@ export default function HomePage() {
 
   return (
     <Container maxWidth="lg" sx={{ py: 8 }}>
+      <Tooltip title="Aide" sx = {{ position: 'fixed', top: 16, right: 16, zIndex: 1000 }}>
+        <IconButton onClick={() => navigate("/aide")}>
+          <HelpIcon />
+        </IconButton>
+      </Tooltip>
       {/* SECTION LOGO + TITRE */}
+      
       <Stack spacing={2} alignItems="center" sx={{ mb: 8 }}>
         <Box 
           component="img" 
@@ -32,11 +38,6 @@ export default function HomePage() {
           <Typography variant="h3" component="h1" fontWeight="bold" textAlign="center">
             Transcribe AI Suite
           </Typography>
-          <Tooltip title="Aide">
-            <IconButton onClick={() => navigate("/aide")}>
-              <HelpIcon />
-            </IconButton>
-          </Tooltip>
         </Box>
         <Typography variant="h6" color="text.secondary" textAlign="center">
           Une collection d'outils de transcription alimentés par l'IA pour répondre à tous vos besoins de conversion audio-texte.
@@ -54,7 +55,7 @@ export default function HomePage() {
                 sx={{ height: '100%', p: 2, "&.Mui-disabled": { cursor: "not-allowed", pointerEvents: "auto"}}}>
                 <CardContent>
                   <Box sx={{ mb: 2 }}>
-                    {module.icon.map((icon, iconIndex) => (
+                    {module.icon.slice().reverse().map((icon, iconIndex) => (
                       <Box key={iconIndex} component="span" sx={{ mr: 1 }}>
                         {icon}
                       </Box>
