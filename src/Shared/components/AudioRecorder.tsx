@@ -79,6 +79,7 @@ export default function AudioRecorder({ onRecordEnd } : AudioRecorderProps){
         }
         newAudio = {blob: blobResult.audioBlob, mimeType: "audio/webm", filename: "recorded-audio.webm"};
         onRecordEnd(newAudio);
+        showAlert( "L'enregistrement est terminé.", "info");
     }
     return(
         <>
