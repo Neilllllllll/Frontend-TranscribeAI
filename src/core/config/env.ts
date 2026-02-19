@@ -1,18 +1,33 @@
+export {};
+
+declare global {
+  interface Window {
+    __ENV__?: Record<string, string>;
+  }
+}
+
+const runtimeEnv = window.__ENV__ ?? {};
+
+const getEnv = (key: string, fallback?: string) => {
+  const v = runtimeEnv[key];
+  return (v !== undefined && v !== "") ? v : fallback;
+};
+
 export const BatchTranscriptionEnv = {
-    API_KEY: process.env.REACT_APP_API_KEY,
-    MAX_SIZE_AUDIO: process.env.REACT_APP_MAX_SIZE_AUDIO_BATCH,
-    MAX_TIME_PROCESSING: process.env.REACT_APP_MAX_TIME_PROCESSING_BATCH, 
-    TIME_BETWEEN_EACH_POLLING: process.env.REACT_APP_TIME_BETWEEN_EACH_POLLING_BATCH,
+  API_KEY: getEnv("REACT_APP_API_KEY"),
+  MAX_SIZE_AUDIO: getEnv("REACT_APP_MAX_SIZE_AUDIO_BATCH"),
+  MAX_TIME_PROCESSING: getEnv("REACT_APP_MAX_TIME_PROCESSING_BATCH"),
+  TIME_BETWEEN_EACH_POLLING: getEnv("REACT_APP_TIME_BETWEEN_EACH_POLLING_BATCH"),
 };
 
 export const DiarizationEnv = {
-    API_KEY: process.env.REACT_APP_API_KEY,
-    MAX_SIZE_AUDIO: process.env.REACT_APP_MAX_SIZE_AUDIO_DIARIZATION,
-    MAX_TIME_PROCESSING: process.env.REACT_APP_MAX_TIME_PROCESSING_DIARIZATION, 
-    TIME_BETWEEN_EACH_POLLING: process.env.REACT_APP_TIME_BETWEEN_EACH_POLLING_DIARIZATION,
-    MAX_SPEAKERS: process.env.REACT_APP_MAX_SPEAKERS_DIARIZATION,
+  API_KEY: getEnv("REACT_APP_API_KEY"),
+  MAX_SIZE_AUDIO: getEnv("REACT_APP_MAX_SIZE_AUDIO_DIARIZATION"),
+  MAX_TIME_PROCESSING: getEnv("REACT_APP_MAX_TIME_PROCESSING_DIARIZATION"),
+  TIME_BETWEEN_EACH_POLLING: getEnv("REACT_APP_TIME_BETWEEN_EACH_POLLING_DIARIZATION"),
+  MAX_SPEAKERS: getEnv("REACT_APP_MAX_SPEAKERS_DIARIZATION"),
 };
 
 export const StreamingEnv = {
-    API_KEY: process.env.REACT_APP_API_KEY,
+  API_KEY: getEnv("REACT_APP_API_KEY"),
 };
